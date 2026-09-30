@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ChizzyVFX | Content Specialist Team</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    /* Custom animations and styling to enhance the Tailwind base */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-up {
+      animation: fadeUp 0.6s ease-out forwards;
+    }
+    .delay-100 { animation-delay: 100ms; }
+    .delay-200 { animation-delay: 200ms; }
+    .delay-300 { animation-delay: 300ms; }
+  </style>
+</head>
+<body class="bg-[var(--background)] text-[var(--foreground)] antialiased font-sans">
+  
+  <!-- Navigation -->
+  <nav class="border-b border-[var(--border)] bg-[var(--background)]/80 backdrop-blur-md sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+      <div class="font-bold text-xl tracking-tight text-[var(--foreground)]">Chizzy<span class="text-[var(--primary)]">VFX</span></div>
+      <div class="hidden md:flex gap-6 text-[var(--muted-foreground)] text-sm font-medium">
+        <a href="#services" class="hover:text-[var(--foreground)] transition-colors">Services</a>
+        <a href="#process" class="hover:text-[var(--foreground)] transition-colors">Process</a>
+        <a href="#pricing" class="hover:text-[var(--foreground)] transition-colors">Pricing</a>
+      </div>
+      <a href="#contact" class="bg-[var(--primary)] text-[var(--primary-foreground)] px-5 py-2 rounded-full text-sm font-medium hover:opacity-90 transition-opacity shadow-sm">
+        Book a Call
+      </a>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <header class="max-w-5xl mx-auto px-6 py-24 md:py-32 text-center flex flex-col items-center">
+    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--secondary)] text-[var(--secondary-foreground)] text-xs font-semibold uppercase tracking-widest mb-8 animate-fade-up">
+      <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+      Accepting New Clients
+    </div>
+    <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight mb-6 leading-tight animate-fade-up delay-100">
+      Don't just hire an editor.<br>
+      <span class="text-transparent bg-clip-text bg-gradient-to-r from-[var(--primary)] to-[var(--accent)]">Hire a content specialist.</span>
+    </h1>
+    <p class="text-lg md:text-xl text-[var(--muted-foreground)] max-w-2xl mb-10 animate-fade-up delay-200">
+      Get a specialist team that strategizes, scripts, edits, repurposes, and schedules your content — for roughly half of what a traditional setup costs.
+    </p>
+    <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto animate-fade-up delay-300">
+      <a href="#contact" class="bg-[var(--primary)] text-[var(--primary-foreground)] px-8 py-4 rounded-full text-base font-medium hover:opacity-90 transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 w-full sm:w-auto">
+        Book a strategy call
+      </a>
+      <a href="#work" class="bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] px-8 py-4 rounded-full text-base font-medium hover:bg-[var(--card)] transition-all w-full sm:w-auto">
+        See our work
+      </a>
+    </div>
+  </header>
+
+  <!-- Audio Note Section (Redesigned as a prominent feature card) -->
+  <section class="max-w-4xl mx-auto px-6 py-12 mb-20">
+    <div class="bg-[var(--card)] border border-[var(--border)] rounded-3xl p-8 md:p-12 shadow-sm relative overflow-hidden">
+      <!-- Decorative background accent -->
+      <div class="absolute -top-24 -right-24 w-48 h-48 bg-[var(--primary)] opacity-10 blur-3xl rounded-full pointer-events-none"></div>
+      
+      <div class="flex flex-col md:flex-row gap-8 items-start relative z-10">
+        <div class="flex-shrink-0">
+          <button class="w-16 h-16 rounded-full bg-[var(--primary)] text-[var(--primary-foreground)] flex items-center justify-center shadow-md hover:scale-105 transition-transform flex-shrink-0 group">
+            <svg class="w-6 h-6 ml-1 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          </button>
+        </div>
+        <div>
+          <h3 class="text-xs font-bold uppercase tracking-widest text-[var(--primary)] mb-3">A voice note from Chizzy — 2 min</h3>
+          <p class="text-lg text-[var(--foreground)] leading-relaxed mb-4 font-medium">"If you run a business or personal brand, you already know content is tasking. It's not just 'make a video.'"</p>
+          <div class="space-y-4 text-[var(--muted-foreground)] text-sm leading-relaxed">
+            <p>Most people either try to do it all themselves and burn out, or they hire a video editor and realize the editor alone doesn't solve the problem — you're still the one writing scripts, planning the calendar, and chasing consistency.</p>
+            <p>I rebuilt what I offer to cover the whole thing. With AI in the workflow now, a small, tight team can do what used to take a department.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- The Problem -->
+  <section class="border-t border-[var(--border)] bg-[var(--secondary)]/30">
+    <div class="max-w-5xl mx-auto px-6 py-24">
+      <div class="grid md:grid-cols-2 gap-16 items-center">
+        <div>
+          <h2 class="text-3xl md:text-4xl font-bold mb-6">The problem, if you're honest about it.</h2>
+          <p class="text-[var(--muted-foreground)] mb-8">Creating content that actually drives business shouldn't mean running a full-time media company on the side.</p>
+        </div>
+        <div class="space-y-6">
+          <div class="flex gap-4">
+            <div class="w-1.5 rounded-full bg-[var(--accent)] flex-shrink-0"></div>
+            <p class="text-[var(--foreground)] font-medium">You know content should be driving your sales, but it's sitting separate from your ads and outreach.</p>
+          </div>
+          <div class="flex gap-4">
+            <div class="w-1.5 rounded-full bg-[var(--accent)] flex-shrink-0"></div>
+            <p class="text-[var(--foreground)] font-medium">You're either doing it all yourself, or paying for pieces of it (an editor here, a scriptwriter there) and managing them all.</p>
+          </div>
+          <div class="flex gap-4">
+            <div class="w-1.5 rounded-full bg-[var(--accent)] flex-shrink-0"></div>
+            <p class="text-[var(--foreground)] font-medium">You don't have a lead magnet funnel turning your content into an actual list.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services Grid -->
+  <section id="services" class="max-w-6xl mx-auto px-6 py-24">
+    <div class="text-center mb-16">
+      <h2 class="text-3xl md:text-4xl font-bold mb-4">What we actually do</h2>
+      <p class="text-[var(--muted-foreground)] max-w-2xl mx-auto">An end-to-end content engine designed to build authority and capture leads.</p>
+    </div>
+    
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Card 1 -->
+      <div class="bg-[var(--card)] border border-[var(--border)] p-8 rounded-2xl hover:border-[var(--primary)]/50 transition-colors group">
+        <div class="w-12 h-12 bg-[var(--secondary)] rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+          <svg class="w-6 h-6 text-[var(--primary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+        </div>
+        <h4 class="text-xl font-bold mb-3">Strategy & Scripts</h4>
+        <p class="text-[var(--muted-foreground)] text-sm">We plan what gets said and why, before a camera or timeline is ever touched.</p>
+      </div>
+      <!-- Card 2 -->
+      <div class="bg-[var(--card)] border border-[var(--border)] p-8 rounded-2xl hover:border-[var(--primary)]/50 transition-colors group">
+        <div class="w-12 h-12 bg-[var(--secondary)] rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+          <svg class="w-6 h-6 text-[var(--primary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+        </div>
+        <h4 class="text-xl font-bold mb-3">Long-form Editing</h4>
+        <p class="text-[var(--muted-foreground)] text-sm">Your YouTube longs, edited for retention and storytelling — not just basic polish.</p>
+      </div>
+      <!-- Card 3 -->
+      <div class="bg-[var(--card)] border border-[var(--border)] p-8 rounded-2xl hover:border-[var(--primary)]/50 transition-colors group">
+        <div class="w-12 h-12 bg-[var(--secondary)] rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+          <svg class="w-6 h-6 text-[var(--primary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+        </div>
+        <h4 class="text-xl font-bold mb-3">Repurposing</h4>
+        <p class="text-[var(--muted-foreground)] text-sm">Every longform video becomes shorts, engagement reels, carousels, and tweets.</p>
+      </div>
+      <!-- Card 4 -->
+      <div class="bg-[var(--card)] border border-[var(--border)] p-8 rounded-2xl hover:border-[var(--primary)]/50 transition-colors group">
+        <div class="w-12 h-12 bg-[var(--secondary)] rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+          <svg class="w-6 h-6 text-[var(--primary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+        </div>
+        <h4 class="text-xl font-bold mb-3">Platform Management</h4>
+        <p class="text-[var(--muted-foreground)] text-sm">YouTube, Instagram, LinkedIn, Twitter — scheduled and managed, not left to you.</p>
+      </div>
+      <!-- Card 5 -->
+      <div class="bg-[var(--card)] border border-[var(--border)] p-8 rounded-2xl hover:border-[var(--primary)]/50 transition-colors group">
+        <div class="w-12 h-12 bg-[var(--secondary)] rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+          <svg class="w-6 h-6 text-[var(--primary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 19v-8.93a2 2 0 01.89-1.664l7-4.666a2 2 0 012.22 0l7 4.666A2 2 0 0121 10.07V19M3 19a2 2 0 002 2h14a2 2 0 002-2M3 19l6.75-4.5M21 19l-6.75-4.5M3 10l6.75 4.5M21 10l-6.75 4.5m0 0l-1.14.76a2 2 0 01-2.22 0l-1.14-.76"></path></svg>
+        </div>
+        <h4 class="text-xl font-bold mb-3">Lead Magnet Funnels</h4>
+        <p class="text-[var(--muted-foreground)] text-sm">2–3 funnels built directly through your content, turning passive views into captured leads.</p>
+      </div>
+      <!-- Card 6 -->
+      <div class="bg-gradient-to-br from-[var(--card)] to-[var(--secondary)] border border-[var(--border)] p-8 rounded-2xl hover:border-[var(--primary)]/50 transition-colors group">
+        <div class="w-12 h-12 bg-[var(--primary)] rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-md">
+          <svg class="w-6 h-6 text-[var(--primary-foreground)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+        </div>
+        <h4 class="text-xl font-bold mb-3">You approve, we run it</h4>
+        <p class="text-[var(--muted-foreground)] text-sm">You give source prompts, shoot your raw content, and approve deliverables. That's it.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Process & Audience Split -->
+  <section id="process" class="border-t border-[var(--border)]">
+    <div class="max-w-6xl mx-auto px-6 py-24 grid md:grid-cols-2 gap-20">
+      
+      <!-- Audience -->
+      <div>
+        <h2 class="text-3xl font-bold mb-8">Who this is for</h2>
+        <div class="space-y-6">
+          <div class="flex items-start gap-4">
+            <div class="w-6 h-6 rounded-full bg-green-500/20 text-green-600 flex items-center justify-center flex-shrink-0 mt-0.5">✓</div>
+            <p class="text-[var(--foreground)] text-sm">You already have an offer that sells — this reinforces it, it doesn't invent it.</p>
+          </div>
+          <div class="flex items-start gap-4">
+            <div class="w-6 h-6 rounded-full bg-green-500/20 text-green-600 flex items-center justify-center flex-shrink-0 mt-0.5">✓</div>
+            <p class="text-[var(--foreground)] text-sm">You're already running ads, outreach, or some system of lead generation.</p>
+          </div>
+          <div class="flex items-start gap-4">
+            <div class="w-6 h-6 rounded-full bg-green-500/20 text-green-600 flex items-center justify-center flex-shrink-0 mt-0.5">✓</div>
+            <p class="text-[var(--foreground)] text-sm">You want content pushing leads toward that system — not just for vanity metrics.</p>
+          </div>
+          <div class="flex items-start gap-4 opacity-75 mt-8 pt-6 border-t border-[var(--border)]">
+            <div class="w-6 h-6 rounded-full bg-red-500/20 text-red-600 flex items-center justify-center flex-shrink-0 mt-0.5">✗</div>
+            <p class="text-[var(--foreground)] text-sm italic">Not for you yet if you have no sales motion at all — content can't be your only system.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Process -->
+      <div>
+        <h2 class="text-3xl font-bold mb-8">How we do it</h2>
+        <div class="relative border-l-2 border-[var(--border)] ml-3 space-y-10 py-2">
+          
+          <div class="relative pl-8">
+            <div class="absolute -left-[13px] top-1 w-6 h-6 rounded-full bg-[var(--background)] border-2 border-[var(--primary)] flex items-center justify-center text-xs font-bold text-[var(--primary)]">1</div>
+            <h4 class="font-bold text-lg mb-1">You shoot, we script</h4>
+            <p class="text-[var(--muted-foreground)] text-sm">Send raw footage and prompts. We turn it into structured longform.</p>
+          </div>
+          
+          <div class="relative pl-8">
+            <div class="absolute -left-[13px] top-1 w-6 h-6 rounded-full bg-[var(--background)] border-2 border-[var(--primary)] flex items-center justify-center text-xs font-bold text-[var(--primary)]">2</div>
+            <h4 class="font-bold text-lg mb-1">We edit and repurpose</h4>
+            <p class="text-[var(--muted-foreground)] text-sm">Longform gets edited, then cut into shorts, reels, and tweets.</p>
+          </div>
+
+          <div class="relative pl-8">
+            <div class="absolute -left-[13px] top-1 w-6 h-6 rounded-full bg-[var(--background)] border-2 border-[var(--primary)] flex items-center justify-center text-xs font-bold text-[var(--primary)]">3</div>
+            <h4 class="font-bold text-lg mb-1">We build the funnel</h4>
+            <p class="text-[var(--muted-foreground)] text-sm">Lead magnets are built and tracked to capture your viewers.</p>
+          </div>
+
+          <div class="relative pl-8">
+            <div class="absolute -left-[13px] top-1 w-6 h-6 rounded-full bg-[var(--background)] border-2 border-[var(--primary)] flex items-center justify-center text-xs font-bold text-[var(--primary)]">4</div>
+            <h4 class="font-bold text-lg mb-1">We post and manage</h4>
+            <p class="text-[var(--muted-foreground)] text-sm">Everything goes out across platforms, on schedule automatically.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section id="pricing" class="bg-[var(--secondary)]/50 py-24 border-y border-[var(--border)]">
+    <div class="max-w-4xl mx-auto px-6">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl md:text-4xl font-bold mb-4">We start low, and earn our way up</h2>
+        <p class="text-[var(--muted-foreground)] max-w-2xl mx-auto">We're result-focused. We only increase our rate once your content hits specific, tracked metrics.</p>
+      </div>
+
+      <!-- Pricing Comparison -->
+      <div class="bg-[var(--card)] rounded-3xl p-8 md:p-12 border border-[var(--border)] shadow-xl mb-12 flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[var(--primary)] to-[var(--accent)]"></div>
+        
+        <div class="text-center md:text-left flex-1">
+          <p class="text-sm text-[var(--muted-foreground)] uppercase tracking-wider font-semibold mb-2">Traditional Setup</p>
+          <div class="text-3xl font-bold text-[var(--muted-foreground)] line-through decoration-[var(--accent)] decoration-4 mb-2 opacity-60">₦450k+</div>
+          <p class="text-sm text-[var(--muted-foreground)]">SMM + editor + scriptwriter</p>
+        </div>
+        
+        <div class="w-12 h-12 rounded-full bg-[var(--secondary)] flex items-center justify-center flex-shrink-0 text-[var(--muted-foreground)] rotate-90 md:rotate-0">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+        </div>
+
+        <div class="text-center md:text-right flex-1">
+          <p class="text-sm text-[var(--primary)] uppercase tracking-wider font-semibold mb-2">Starting with us</p>
+          <div class="text-5xl font-extrabold text-[var(--foreground)] mb-2">₦250k</div>
+          <p class="text-sm font-medium text-[var(--foreground)]">One team, nothing to manage</p>
+        </div>
+      </div>
+
+      <!-- Tiers -->
+      <div class="space-y-4">
+        <div class="flex items-center justify-between p-6 bg-[var(--card)] border border-[var(--border)] rounded-xl hover:border-[var(--primary)]/30 transition-colors">
+          <div class="flex-1"><span class="font-bold text-xl">₦250k</span><span class="text-[var(--muted-foreground)] text-sm">/mo</span></div>
+          <div class="flex-[2]"><div class="font-bold">Starting tier</div><div class="text-[var(--muted-foreground)] text-sm">Where every client begins</div></div>
+          <div class="flex-1 text-right text-sm font-medium hidden md:block">Full scope, day one</div>
+        </div>
+        <div class="flex items-center justify-between p-6 bg-[var(--card)] border border-[var(--border)] rounded-xl hover:border-[var(--primary)]/30 transition-colors">
+          <div class="flex-1"><span class="font-bold text-xl">₦350k</span><span class="text-[var(--muted-foreground)] text-sm">/mo</span></div>
+          <div class="flex-[2]"><div class="font-bold">Tier 2</div><div class="text-[var(--muted-foreground)] text-sm">After 50k views + 50 tracked leads</div></div>
+          <div class="flex-1 text-right text-sm font-medium hidden md:block">Proven results</div>
+        </div>
+        <div class="flex items-center justify-between p-6 bg-[var(--card)] border border-[var(--border)] rounded-xl hover:border-[var(--primary)]/30 transition-colors">
+          <div class="flex-1"><span class="font-bold text-xl">₦500k</span><span class="text-[var(--muted-foreground)] text-sm">/mo</span></div>
+          <div class="flex-[2]"><div class="font-bold">Tier 3</div><div class="text-[var(--muted-foreground)] text-sm">After 150k views + 150 tracked leads</div></div>
+          <div class="flex-1 text-right text-sm font-medium hidden md:block">Full rate, full engine</div>
+        </div>
+      </div>
+      <p class="text-center text-sm text-[var(--muted-foreground)] mt-8">Leads are tracked through the funnel we build for you — you get a report showing exactly where every view came from.</p>
+    </div>
+  </section>
+
+  <!-- CTA & Lead Magnet -->
+  <section class="max-w-4xl mx-auto px-6 py-24 text-center">
+    <h2 class="text-4xl font-bold mb-6">Ready to see it on your content?</h2>
+    <p class="text-[var(--muted-foreground)] text-lg mb-10 max-w-2xl mx-auto">We'll repurpose one of your existing videos first, free, so you can see exactly what this looks like before you commit to anything.</p>
+    <a href="#contact" class="inline-block bg-[var(--primary)] text-[var(--primary-foreground)] px-10 py-4 rounded-full text-lg font-medium hover:opacity-90 transition-all shadow-lg hover:shadow-xl hover:-translate-y-1 mb-24">
+      Book your free test run
+    </a>
+
+    <!-- Lead Magnet Box -->
+    <div class="bg-[var(--card)] border border-[var(--border)] rounded-3xl p-8 md:p-12 text-left relative overflow-hidden">
+      <div class="absolute right-0 top-0 w-64 h-64 bg-[var(--accent)] opacity-5 blur-3xl rounded-full"></div>
+      
+      <div class="md:w-2/3 relative z-10">
+        <h3 class="text-2xl font-bold mb-4">Not ready to hand it off yet?</h3>
+        <p class="text-[var(--muted-foreground)] mb-8">Get our free guide on how to find, test, and hire a video editor properly — plus our AI scripting prompts to stop being the bottleneck.</p>
+        
+        <form class="flex flex-col sm:flex-row gap-3">
+          <input type="email" placeholder="Enter your email" class="flex-1 bg-[var(--background)] border border-[var(--border)] rounded-lg px-4 py-3 text-[var(--foreground)] placeholder:text-[var(--muted-foreground)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:border-transparent transition-all">
+          <button type="submit" class="bg-[var(--foreground)] text-[var(--background)] px-6 py-3 rounded-lg font-medium hover:opacity-90 transition-opacity">
+            Send me the guide
+          </button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="border-t border-[var(--border)] bg-[var(--background)] py-12 text-center">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="font-bold text-xl tracking-tight text-[var(--foreground)] opacity-50 mb-4">Chizzy<span class="text-[var(--primary)]">VFX</span></div>
+      <p class="text-[var(--muted-foreground)] text-sm">A small team, run by Chizzy, built to do the job of four hires.</p>
+    </div>
+  </footer>
+
+</body>
+</html>

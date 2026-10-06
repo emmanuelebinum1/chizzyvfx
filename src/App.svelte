@@ -235,7 +235,7 @@
 
       <h1 class="hero-title animate-fade-in">
         Don't just hire an editor.<br>
-        <span class="gradient-text">Hire a content specialist.</span>
+        Hire a content <span class="gradient-text">specialist.</span>
       </h1>
 
       <p class="hero-description animate-fade-in">

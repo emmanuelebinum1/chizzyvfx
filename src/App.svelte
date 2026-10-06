@@ -1315,6 +1315,11 @@
   }
 
   .hero-title {
+    font-size: clamp(2.75rem, 5.8vw, 4.85rem);
+    font-weight: 800;
+    line-height: 1.08;
+    letter-spacing: -0.035em;
+    color: var(--text-primary);
     margin-bottom: 24px;
   }
 

@@ -217,11 +217,19 @@ p {
   border: 1px solid var(--glass-border);
 }
 
-/* Gradient Text */
+/* Gradient Text - Apple Signature Blue Gradient */
 .gradient-text {
-  background: linear-gradient(135deg, var(--text-primary) 30%, var(--accent-blue) 100%);
+  background: linear-gradient(135deg, #0071e3 0%, #00a3ff 50%, #38bdf8 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+
+[data-theme="dark"] .gradient-text {
+  background: linear-gradient(135deg, #2997ff 0%, #60a5fa 50%, #93c5fd 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
 }
 
 /* Animations */

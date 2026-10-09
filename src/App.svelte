@@ -12,27 +12,6 @@
     }
   }
 
-  // Audio Voice Note Simulation
-  let isPlaying = false;
-  let audioProgress = 0;
-  let audioTimer;
-
-  function toggleAudio() {
-    isPlaying = !isPlaying;
-    if (isPlaying) {
-      audioTimer = setInterval(() => {
-        if (audioProgress >= 100) {
-          isPlaying = false;
-          audioProgress = 0;
-          clearInterval(audioTimer);
-        } else {
-          audioProgress += 1.5;
-        }
-      }, 300);
-    } else {
-      clearInterval(audioTimer);
-    }
-  }
 
   // Active pricing tier selection
   let selectedTier = 0;
@@ -92,26 +71,67 @@
     }
   }
 
-  // Active Video Modal
-  let activeVideo = null;
-  const portfolioItems = [
+  // Active Video/Showcase Modal
+  let activeWork = null;
+
+  const espreHero = {
+    id: 'youtube-main',
+    type: 'youtube',
+    platform: 'YouTube',
+    category: 'YouTube Pillar Video',
+    badge: 'YouTube Long-Form • 16:9 4K',
+    title: "Healthcare Doesn't Understand the Patient",
+    subtitle: "Episode 1 • Esprē Health Podcast",
+    description: "Complete end-to-end production: dynamic multi-camera switching, narrative pacing hooks, b-roll insertions, custom graphics, and engineered sound design that command high-ticket healthcare authority.",
+    thumbnail: '/espre-youtube.jpg',
+    url: 'https://youtu.be/iOw7PYt4OD8?si=Ye4NyHF9UTWmJuAV',
+    embedUrl: 'https://www.youtube.com/embed/iOw7PYt4OD8?autoplay=1',
+    features: [
+      'Multi-Cam 4K Switching & Grade',
+      'Dynamic B-Roll & Visual Hooks',
+      'Engineered Broadcast Audio Master'
+    ]
+  };
+
+  const espreSocialItems = [
     {
-      client: 'Esprē Health',
-      desc: 'Weekly YouTube + IG content system',
-      tags: ['Healthcare', 'YouTube Longs', 'Shorts'],
-      stats: '240k+ Views • 85 Leads'
+      id: 'reel-short',
+      type: 'instagram',
+      platform: 'Instagram',
+      format: 'Short Form Reel',
+      badge: 'Instagram Reel • 9:16',
+      title: 'High-Retention Algorithmic Cut',
+      description: 'A 45-second micro-story engineered for the FYP explore algorithm with kinetic typography, audio soundscapes, and rapid zoom transitions.',
+      url: 'https://www.instagram.com/reel/DagHXkEj0SW/?stkn=MW9qYXI3YTkwOHAzbg==',
+      embedUrl: 'https://www.instagram.com/reel/DagHXkEj0SW/embed/',
+      tag: 'Explore Algorithm Hook',
+      aspectRatio: '9/16'
     },
     {
-      client: 'Shopbot',
-      desc: 'Content-driven outreach & funnel',
-      tags: ['SaaS', 'LinkedIn', 'Lead Funnel'],
-      stats: '180k+ Views • 140 Leads'
+      id: 'reel-engagement',
+      type: 'instagram',
+      platform: 'Instagram',
+      format: 'Engagement Reel',
+      badge: 'Instagram Reel • 9:16',
+      title: 'Founder Perspective & Discussion',
+      description: 'Core thought-leadership moment extracted from the interview, formatted to spark debate, founder DMs, and community shares.',
+      url: 'https://www.instagram.com/reel/DadXBqaDmnx/?stkn=MWd6NXd1eDVtZ2V1eQ==',
+      embedUrl: 'https://www.instagram.com/reel/DadXBqaDmnx/embed/',
+      tag: 'Clinical Insight & Debate',
+      aspectRatio: '9/16'
     },
     {
-      client: 'Wealthflow',
-      desc: 'Repurposed content series',
-      tags: ['Fintech', 'X / Twitter', 'Carousels'],
-      stats: '410k+ Views • 210 Leads'
+      id: 'carousel-post',
+      type: 'instagram',
+      platform: 'Instagram',
+      format: 'Carousel Post',
+      badge: 'Instagram Carousel • 1:1',
+      title: 'Key Takeaways & Framework Slides',
+      description: 'Multi-slide educational deck breaking down complex healthcare systems into digestible, bookmark-worthy infographics that drive profile visits.',
+      url: 'https://www.instagram.com/p/DZDmyn_kjDN/?stkn=MWJ2bDRjMXByNDNjMQ==',
+      embedUrl: 'https://www.instagram.com/p/DZDmyn_kjDN/embed/',
+      tag: 'Save-Optimized Deck',
+      aspectRatio: '1/1'
     }
   ];
 
@@ -257,74 +277,25 @@
     </div>
   </header>
 
-  <!-- Apple Voice Note / Audio Player Card -->
-  <section class="voice-note-section">
+  <!-- Video Showcase Section -->
+  <section class="video-section" id="video">
     <div class="section-container">
-      <div class="voice-card apple-card">
-        <div class="voice-card-header">
-          <!-- Play / Pause Action Button -->
-          <button 
-            class="play-circle-btn" 
-            on:click={toggleAudio}
-            aria-label={isPlaying ? 'Pause voice note' : 'Play voice note from Chizzy'}
-          >
-            {#if isPlaying}
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                <rect x="6" y="4" width="4" height="16" rx="1"></rect>
-                <rect x="14" y="4" width="4" height="16" rx="1"></rect>
-              </svg>
-            {:else}
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="margin-left: 2px;">
-                <path d="M8 5v14l11-7z"></path>
-              </svg>
-            {/if}
-          </button>
-
-          <div class="voice-info">
-            <div class="voice-meta">
-              <span class="badge-pill">Voice Note</span>
-              <span class="voice-author">A voice note from Chizzy — 2 min</span>
-            </div>
-
-            <!-- Waveform & Progress -->
-            <div class="waveform-container {isPlaying ? 'waveform-active' : ''}">
-              <div class="waveform-bars">
-                <div class="waveform-bar bar-1" style="height: {isPlaying ? '18px' : '10px'}"></div>
-                <div class="waveform-bar bar-2" style="height: {isPlaying ? '24px' : '16px'}"></div>
-                <div class="waveform-bar bar-3" style="height: {isPlaying ? '14px' : '8px'}"></div>
-                <div class="waveform-bar bar-4" style="height: {isPlaying ? '26px' : '20px'}"></div>
-                <div class="waveform-bar bar-5" style="height: {isPlaying ? '16px' : '12px'}"></div>
-                <div class="waveform-bar bar-6" style="height: {isPlaying ? '22px' : '14px'}"></div>
-                <div class="waveform-bar bar-7" style="height: {isPlaying ? '12px' : '6px'}"></div>
-              </div>
-
-              <div class="progress-track">
-                <div class="progress-fill" style="width: {audioProgress}%"></div>
-              </div>
-
-              <span class="timestamp">{isPlaying ? 'Playing...' : '2:00'}</span>
-            </div>
+      <div class="video-card apple-card">
+        <div class="video-card-header">
+          <div class="video-meta">
+            <span class="badge-pill">Overview</span>
+            <span class="video-author">A message from Chizzy — 2 min</span>
           </div>
         </div>
 
-        <div class="voice-transcription">
-          <p class="lead-quote">
-            "Hey — I'm Chizzy. Before anything else, this is me talking to you directly, not a script written to sell you something. So give me two minutes."
-          </p>
-          <div class="body-paragraphs">
-            <p>
-              If you run a business or a personal brand, you already know content is tasking. It's not just "make a video." It's strategy, then scripting, then filming, then editing, then cutting that one video into ten more pieces, then actually posting all of it on time, on every platform. Most people either try to do it all themselves and burn out, or they hire a video editor and realize the editor alone doesn't solve the problem — you're still the one writing scripts, planning the calendar, and chasing consistency.
-            </p>
-            <p>
-              I used to be that video editor. Just cuts, just polish. But I kept watching clients hand me raw footage with no strategy behind it, and the final video would look good and still underperform, because editing was never the actual bottleneck. So I rebuilt what I offer — and built a small team around it — to cover the whole thing: <strong>strategy, scripting, editing, repurposing, scheduling.</strong>
-            </p>
-            <p>
-              Before AI, doing all of this for a client meant hiring three or four separate people, minimum. With AI in the workflow now, a small, tight team can do what used to take a department. That's the only reason this offer is possible at this price.
-            </p>
-            <p class="closing-note">
-              This isn't for everyone. Keep reading for who it's actually for, and the pricing, below.
-            </p>
-          </div>
+        <div class="video-frame-container">
+          <iframe 
+            src="https://drive.google.com/file/d/1YSwXEPACpG1911hAzZsBEuWAE4EmW9if/preview" 
+            title="A message from Chizzy"
+            allow="autoplay; fullscreen; picture-in-picture"
+            allowfullscreen
+            loading="lazy"
+          ></iframe>
         </div>
       </div>
     </div>
@@ -657,95 +628,297 @@
     </div>
   </section>
 
-  <!-- Proof of Work / Portfolio Showcase (Apple TV Keynote Style) -->
+  <!-- Proof of Work / Portfolio Showcase (Apple Bento Grid Showcase) -->
   <section id="work" class="work-section">
     <div class="section-container">
       <div class="section-header">
-        <span class="section-eyebrow">Portfolio</span>
-        <h2>Proof of work.</h2>
-        <p class="section-sub">A sample of content and growth systems built for our active partners.</p>
+        <span class="section-eyebrow">Client Case Study</span>
+        <h2>Proof of work: Esprē Health.</h2>
+        <p class="section-sub">
+          One long-form podcast conversation engineered into an omnipresent multi-channel distribution engine across YouTube and Instagram.
+        </p>
       </div>
 
-      <div class="portfolio-grid">
-        {#each portfolioItems as item}
-          <button 
-            type="button"
-            class="project-card apple-card" 
-            on:click={() => activeVideo = item}
-          >
-            <div class="video-container">
-              <div class="gradient-overlay"></div>
+      <!-- Apple Bento Grid for Esprē Health -->
+      <div class="espre-bento-grid">
+        <!-- Hero Bento Card: YouTube Pillar Video (16:9 Anchor) -->
+        <div class="bento-hero-card apple-card">
+          <div class="bento-hero-grid">
+            <!-- Left: Video Thumbnail Container with Apple Play Badge -->
+            <div 
+              class="hero-media-wrapper" 
+              role="button" 
+              tabindex="0"
+              on:click={() => activeWork = espreHero}
+              on:keydown={(e) => (e.key === 'Enter' || e.key === ' ') && (activeWork = espreHero)}
+              aria-label="Play Esprē Health YouTube Full Episode"
+            >
+              <img 
+                src={espreHero.thumbnail} 
+                alt="Esprē Health Episode 1 YouTube Thumbnail" 
+                class="hero-media-img" 
+                loading="lazy"
+              />
+              <div class="media-overlay-gradient"></div>
               
-              <div class="play-badge">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M8 5v14l11-7z"></path>
+              <div class="media-top-badge">
+                <span class="pill-badge apple-glass">
+                  <span class="status-dot yt-dot"></span>
+                  {espreHero.badge}
+                </span>
+              </div>
+
+              <div class="bento-play-button">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M8 5v14l11-7z"/>
                 </svg>
               </div>
 
-              <div class="video-card-content">
-                <div class="card-tags">
-                  {#each item.tags as tag}
-                    <span class="tag-pill">{tag}</span>
-                  {/each}
+              <div class="media-bottom-info">
+                <span class="media-hint">Click to preview inside player</span>
+              </div>
+            </div>
+
+            <!-- Right: Production Details and Conversion System -->
+            <div class="bento-hero-content">
+              <div class="hero-content-eyebrow">
+                <span class="category-pill">{espreHero.category}</span>
+                <span class="client-pill">Esprē Health</span>
+              </div>
+
+              <h3 class="hero-episode-title">{espreHero.title}</h3>
+              <p class="hero-episode-subtitle">{espreHero.subtitle}</p>
+              
+              <p class="hero-episode-desc">{espreHero.description}</p>
+
+              <div class="hero-features-list">
+                {#each espreHero.features as feat}
+                  <div class="feature-chip">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    <span>{feat}</span>
+                  </div>
+                {/each}
+              </div>
+
+              <div class="hero-action-buttons">
+                <button 
+                  type="button" 
+                  class="btn btn-primary hero-watch-btn" 
+                  on:click={() => activeWork = espreHero}
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M8 5v14l11-7z"/>
+                  </svg>
+                  <span>Watch Episode</span>
+                </button>
+
+                <a 
+                  href={espreHero.url} 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  class="btn btn-secondary hero-link-btn"
+                >
+                  <span>Open on YouTube</span>
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="7" y1="17" x2="17" y2="7"></line>
+                    <polyline points="7 7 17 7 17 17"></polyline>
+                  </svg>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section Transition Banner: Repurposing Breakdown -->
+        <div class="bento-divider-header">
+          <div class="divider-line"></div>
+          <span class="divider-text">Downstream Repurposed Assets (From The Same Recording)</span>
+          <div class="divider-line"></div>
+        </div>
+
+        <!-- 3 Social Assets Grid (Short Form Reels, Engagement Reels, Carousel Posts) -->
+        <div class="bento-social-grid">
+          {#each espreSocialItems as item}
+            <div class="social-bento-card apple-card">
+              <!-- Card Media Mockup -->
+              <div 
+                class="social-mockup-wrap" 
+                role="button" 
+                tabindex="0"
+                on:click={() => activeWork = item}
+                on:keydown={(e) => (e.key === 'Enter' || e.key === ' ') && (activeWork = item)}
+                aria-label={`Preview ${item.title}`}
+              >
+                <!-- Visual Background Mockup Canvas -->
+                <div class="social-canvas {item.format === 'Carousel Post' ? 'canvas-carousel' : 'canvas-reel'}">
+                  <div class="social-backdrop-blur"></div>
+                  
+                  <!-- Format Indicator -->
+                  <div class="social-top-row">
+                    <span class="pill-badge apple-glass ig-badge">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                      </svg>
+                      {item.format}
+                    </span>
+                    <span class="ratio-pill">{item.aspectRatio}</span>
+                  </div>
+
+                  <!-- Center Graphic Preview -->
+                  {#if item.format === 'Carousel Post'}
+                    <div class="carousel-deck-preview">
+                      <div class="slide-stack slide-3"></div>
+                      <div class="slide-stack slide-2"></div>
+                      <div class="slide-main">
+                        <div class="slide-header-mini">
+                          <span class="slide-espre-tag">Esprē Health</span>
+                          <span class="slide-num">1 / 7</span>
+                        </div>
+                        <p class="slide-mock-headline">Why Traditional Healthcare Misses The Patient Voice</p>
+                        <div class="slide-bar-decor"></div>
+                      </div>
+                    </div>
+                  {:else}
+                    <div class="reel-mockup-frame">
+                      <div class="reel-play-icon">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                          <path d="M8 5v14l11-7z"/>
+                        </svg>
+                      </div>
+                      <div class="audio-wave-bars">
+                        <span></span><span></span><span></span><span></span><span></span>
+                      </div>
+                    </div>
+                  {/if}
+
+                  <!-- Bottom Tag -->
+                  <div class="social-bottom-tag">
+                    <span class="strategy-tag">{item.tag}</span>
+                  </div>
                 </div>
-                <h3 class="client-title">{item.client}</h3>
-                <p class="client-stat">{item.stats}</p>
+              </div>
+
+              <!-- Card Meta & Content -->
+              <div class="social-card-body">
+                <span class="social-badge-text">{item.badge}</span>
+                <h4 class="social-title">{item.title}</h4>
+                <p class="social-desc">{item.description}</p>
+                
+                <div class="social-card-footer">
+                  <button 
+                    type="button" 
+                    class="btn btn-secondary social-preview-btn" 
+                    on:click={() => activeWork = item}
+                  >
+                    <span>Preview</span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M8 5v14l11-7z"/>
+                    </svg>
+                  </button>
+
+                  <a 
+                    href={item.url} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    class="social-external-link"
+                    aria-label={`Open ${item.title} on Instagram`}
+                  >
+                    <span>Instagram</span>
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="7" y1="17" x2="17" y2="7"></line>
+                      <polyline points="7 7 17 7 17 17"></polyline>
+                    </svg>
+                  </a>
+                </div>
               </div>
             </div>
-
-            <div class="project-footer">
-              <p class="project-desc">{item.desc}</p>
-              <span class="preview-link">
-                View system 
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M5 12h14M12 5l7 7-7 7"/>
-                </svg>
-              </span>
-            </div>
-          </button>
-        {/each}
+          {/each}
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- Interactive Project Video Modal -->
-  {#if activeVideo}
+  <!-- Interactive Project Video / Embed Modal -->
+  {#if activeWork}
     <div 
       class="modal-backdrop" 
       role="presentation"
-      on:click={() => activeVideo = null}
-      on:keydown={(e) => e.key === 'Escape' && (activeVideo = null)}
+      on:click={() => activeWork = null}
+      on:keydown={(e) => e.key === 'Escape' && (activeWork = null)}
     >
       <div 
-        class="modal-dialog apple-glass apple-card" 
+        class="modal-dialog apple-glass apple-card showcase-modal {activeWork.type === 'instagram' ? 'modal-instagram' : 'modal-youtube'}" 
         role="dialog"
         aria-modal="true"
         tabindex="-1"
         on:click|stopPropagation
         on:keydown|stopPropagation
       >
-        <button class="modal-close-btn" on:click={() => activeVideo = null} aria-label="Close dialog">✕</button>
+        <button class="modal-close-btn" on:click={() => activeWork = null} aria-label="Close dialog">✕</button>
+        
         <div class="modal-header">
-          <span class="badge-pill">{activeVideo.client}</span>
-          <h3>{activeVideo.desc}</h3>
-          <p class="modal-stat">{activeVideo.stats}</p>
-        </div>
-
-        <div class="mock-player">
-          <div class="mock-player-screen">
-            <div class="pulse-play">
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M8 5v14l11-7z"></path>
-              </svg>
-            </div>
-            <p>Interactive Showcase Active</p>
+          <div class="modal-header-pills">
+            <span class="badge-pill">Esprē Health</span>
+            <span class="badge-pill platform-badge {activeWork.platform === 'YouTube' ? 'badge-yt' : 'badge-ig'}">
+              {activeWork.badge}
+            </span>
           </div>
+          <h3>{activeWork.title}</h3>
         </div>
 
-        <div class="modal-footer">
-          <a href="#contact" class="btn btn-primary" on:click={() => activeVideo = null}>
-            Request case study breakdown
+        <div class="modal-embed-container">
+          {#if activeWork.type === 'youtube'}
+            <div class="video-iframe-wrapper">
+              <iframe 
+                src={activeWork.embedUrl} 
+                title={activeWork.title}
+                frameborder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                allowfullscreen
+              ></iframe>
+            </div>
+          {:else}
+            <div class="instagram-iframe-wrapper">
+              <iframe 
+                src={activeWork.embedUrl} 
+                title={activeWork.title}
+                frameborder="0" 
+                scrolling="no" 
+                allowtransparency="true"
+              ></iframe>
+            </div>
+          {/if}
+        </div>
+
+        <div class="modal-footer-custom">
+          <a 
+            href={activeWork.url} 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            class="btn btn-secondary modal-ext-btn"
+          >
+            <span>Open on {activeWork.platform}</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="7" y1="17" x2="17" y2="7"></line>
+              <polyline points="7 7 17 7 17 17"></polyline>
+            </svg>
           </a>
+
+          <button 
+            type="button" 
+            class="btn btn-primary modal-cta-btn" 
+            on:click={() => { activeWork = null; openBookingModal(); }}
+          >
+            <span>Book Strategy Call</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </button>
         </div>
       </div>
     </div>
@@ -767,25 +940,74 @@
         on:click|stopPropagation
         on:keydown|stopPropagation
       >
-        <button class="modal-close-btn" on:click={closeBookingModal} aria-label="Close booking modal">✕</button>
+        <button class="modal-close-btn" on:click={closeBookingModal} aria-label="Close booking modal">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
 
-        <!-- Progress Header -->
+        <!-- Apple Segmented Step Indicator -->
         <div class="booking-header">
-          <div class="booking-progress-pills">
-            <span class="prog-pill {bookingStep >= 1 ? 'active' : ''}">1. Qualification</span>
-            <span class="prog-divider">›</span>
-            <span class="prog-pill {bookingStep >= 2 ? 'active' : ''}">2. Date & Time</span>
-            <span class="prog-divider">›</span>
-            <span class="prog-pill {bookingStep === 3 ? 'active' : ''}">3. Confirmed</span>
+          <div class="apple-step-bar" role="tablist">
+            <button 
+              type="button" 
+              class="step-segment {bookingStep === 1 ? 'active' : ''} {bookingStep > 1 ? 'completed' : ''}"
+              on:click={() => { if (bookingStep === 2) bookingStep = 1; }}
+              disabled={bookingStep === 3}
+            >
+              <span class="step-num">
+                {#if bookingStep > 1}
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                {:else}
+                  1
+                {/if}
+              </span>
+              <span class="step-text">Qualification</span>
+            </button>
+
+            <button 
+              type="button" 
+              class="step-segment {bookingStep === 2 ? 'active' : ''} {bookingStep > 2 ? 'completed' : ''}"
+              disabled={bookingStep !== 2}
+            >
+              <span class="step-num">
+                {#if bookingStep > 2}
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                {:else}
+                  2
+                {/if}
+              </span>
+              <span class="step-text">Date & Time</span>
+            </button>
+
+            <div class="step-segment {bookingStep === 3 ? 'active completed' : ''}">
+              <span class="step-num">
+                {#if bookingStep === 3}
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                {:else}
+                  3
+                {/if}
+              </span>
+              <span class="step-text">Confirmed</span>
+            </div>
           </div>
 
-          {#if bookingStep === 1}
-            <h3 class="booking-title">Book a Strategy Call with Chizzy</h3>
-            <p class="booking-sub">Let's quickly confirm our content engine fits your current business setup.</p>
-          {:else if bookingStep === 2}
-            <h3 class="booking-title">Choose Your Time</h3>
-            <p class="booking-sub">Select an available slot for a 20-minute strategy session on Google Meet.</p>
-          {/if}
+          <div class="booking-header-text">
+            {#if bookingStep === 1}
+              <h3 class="booking-title">Book a Strategy Call</h3>
+              <p class="booking-sub">Let's quickly confirm our content engine fits your current business setup.</p>
+            {:else if bookingStep === 2}
+              <h3 class="booking-title">Choose Your Time</h3>
+              <p class="booking-sub">Select an available slot for a 20-minute strategy session on Google Meet.</p>
+            {/if}
+          </div>
         </div>
 
         {#if bookingStep === 1}
@@ -804,7 +1026,13 @@
                   class="option-card {hasOffer === 'yes' ? 'selected' : ''}" 
                   on:click={() => hasOffer = 'yes'}
                 >
-                  <div class="opt-radio">{#if hasOffer === 'yes'}●{/if}</div>
+                  <div class="opt-check {hasOffer === 'yes' ? 'selected' : ''}">
+                    {#if hasOffer === 'yes'}
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                      </svg>
+                    {/if}
+                  </div>
                   <div class="opt-text">
                     <strong>Yes, validated offer</strong>
                     <span>I already have paying customers / clients.</span>
@@ -817,7 +1045,13 @@
                   class="option-card {hasOffer === 'refining' ? 'selected' : ''}" 
                   on:click={() => hasOffer = 'refining'}
                 >
-                  <div class="opt-radio">{#if hasOffer === 'refining'}●{/if}</div>
+                  <div class="opt-check {hasOffer === 'refining' ? 'selected' : ''}">
+                    {#if hasOffer === 'refining'}
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                      </svg>
+                    {/if}
+                  </div>
                   <div class="opt-text">
                     <strong>Offer in progress</strong>
                     <span>Testing or refining the pricing & messaging.</span>
@@ -829,7 +1063,13 @@
                   class="option-card {hasOffer === 'no' ? 'selected' : ''}" 
                   on:click={() => hasOffer = 'no'}
                 >
-                  <div class="opt-radio">{#if hasOffer === 'no'}●{/if}</div>
+                  <div class="opt-check {hasOffer === 'no' ? 'selected' : ''}">
+                    {#if hasOffer === 'no'}
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                      </svg>
+                    {/if}
+                  </div>
                   <div class="opt-text">
                     <strong>Not yet</strong>
                     <span>Starting from scratch / no sales motion yet.</span>
@@ -850,7 +1090,13 @@
                   class="option-card {leadSystem === 'ads' ? 'selected' : ''}" 
                   on:click={() => leadSystem = 'ads'}
                 >
-                  <div class="opt-radio">{#if leadSystem === 'ads'}●{/if}</div>
+                  <div class="opt-check {leadSystem === 'ads' ? 'selected' : ''}">
+                    {#if leadSystem === 'ads'}
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                      </svg>
+                    {/if}
+                  </div>
                   <div class="opt-text">
                     <strong>Running ads / outbound</strong>
                     <span>Actively driving traffic through paid or outreach.</span>
@@ -863,7 +1109,13 @@
                   class="option-card {leadSystem === 'organic' ? 'selected' : ''}" 
                   on:click={() => leadSystem = 'organic'}
                 >
-                  <div class="opt-radio">{#if leadSystem === 'organic'}●{/if}</div>
+                  <div class="opt-check {leadSystem === 'organic' ? 'selected' : ''}">
+                    {#if leadSystem === 'organic'}
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                      </svg>
+                    {/if}
+                  </div>
                   <div class="opt-text">
                     <strong>Referrals & organic</strong>
                     <span>Generating leads through network & word-of-mouth.</span>
@@ -875,7 +1127,13 @@
                   class="option-card {leadSystem === 'none' ? 'selected' : ''}" 
                   on:click={() => leadSystem = 'none'}
                 >
-                  <div class="opt-radio">{#if leadSystem === 'none'}●{/if}</div>
+                  <div class="opt-check {leadSystem === 'none' ? 'selected' : ''}">
+                    {#if leadSystem === 'none'}
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                      </svg>
+                    {/if}
+                  </div>
                   <div class="opt-text">
                     <strong>No active system yet</strong>
                     <span>Need to build a repeatable pipeline from zero.</span>
@@ -896,10 +1154,16 @@
                   class="option-card {contentGoal === 'leads' ? 'selected' : ''}" 
                   on:click={() => contentGoal = 'leads'}
                 >
-                  <div class="opt-radio">{#if contentGoal === 'leads'}●{/if}</div>
+                  <div class="opt-check {contentGoal === 'leads' ? 'selected' : ''}">
+                    {#if contentGoal === 'leads'}
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                      </svg>
+                    {/if}
+                  </div>
                   <div class="opt-text">
-                    <strong>Leads and sales</strong>
-                    <span>Turn viewers into tracked pipeline & revenue.</span>
+                    <strong>Leads and paying clients</strong>
+                    <span>Turn viewers into tracked pipeline & real revenue.</span>
                   </div>
                   <span class="opt-badge fit-badge">Core Focus</span>
                 </button>
@@ -909,7 +1173,13 @@
                   class="option-card {contentGoal === 'followers' ? 'selected' : ''}" 
                   on:click={() => contentGoal = 'followers'}
                 >
-                  <div class="opt-radio">{#if contentGoal === 'followers'}●{/if}</div>
+                  <div class="opt-check {contentGoal === 'followers' ? 'selected' : ''}">
+                    {#if contentGoal === 'followers'}
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                      </svg>
+                    {/if}
+                  </div>
                   <div class="opt-text">
                     <strong>Followers and likes</strong>
                     <span>Focus primarily on vanity reach & engagement.</span>
@@ -921,20 +1191,24 @@
             <!-- Realtime Alignment Note -->
             {#if hasOffer === 'yes' && contentGoal === 'leads'}
               <div class="fit-callout ideal">
-                <span class="fit-callout-icon">✨</span>
-                <p><strong>Ideal Match:</strong> You already have an offer and want direct leads. That's the exact blueprint we use to scale from ₦250k to high performance.</p>
+                <div class="fit-callout-icon">✨</div>
+                <div>
+                  <strong>Ideal Match:</strong> You already have an offer and want direct leads. That's the exact blueprint we use to scale from ₦250k to high performance.
+                </div>
               </div>
             {:else if contentGoal === 'followers' || hasOffer === 'no'}
               <div class="fit-callout guidance">
-                <span class="fit-callout-icon">💡</span>
-                <p><strong>Strategic Note:</strong> We prioritize business conversion over vanity metrics. On the call, we'll map out how to build a real lead funnel around your content.</p>
+                <div class="fit-callout-icon">💡</div>
+                <div>
+                  <strong>Strategic Note:</strong> We prioritize business conversion over vanity metrics. On the call, we'll map out how to build a real lead funnel around your content.
+                </div>
               </div>
             {/if}
 
             <div class="modal-actions">
               <button type="button" class="btn btn-primary next-btn" on:click={() => bookingStep = 2}>
                 <span>Select Call Date & Time</span>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                   <line x1="5" y1="12" x2="19" y2="12"></line>
                   <polyline points="12 5 19 12 12 19"></polyline>
                 </svg>
@@ -985,40 +1259,60 @@
             <div class="booking-inputs">
               <span class="cal-section-title">Your Details for Calendar Invite</span>
               <div class="inputs-grid">
-                <input 
-                  type="text" 
-                  placeholder="Your Full Name *" 
-                  bind:value={userName} 
-                  required 
-                  class="apple-input" 
-                />
-                <input 
-                  type="email" 
-                  placeholder="Work Email *" 
-                  bind:value={userEmail} 
-                  required 
-                  class="apple-input" 
-                />
-                <input 
-                  type="text" 
-                  placeholder="Website or Social Handle (Optional)" 
-                  bind:value={userHandle} 
-                  class="apple-input full-width" 
-                />
+                <div class="input-field">
+                  <label for="booking-name" class="input-label">Full Name <span class="required">*</span></label>
+                  <input 
+                    id="booking-name"
+                    type="text" 
+                    placeholder="e.g. Alex Morgan" 
+                    bind:value={userName} 
+                    required 
+                    class="apple-input" 
+                  />
+                </div>
+                <div class="input-field">
+                  <label for="booking-email" class="input-label">Work Email <span class="required">*</span></label>
+                  <input 
+                    id="booking-email"
+                    type="email" 
+                    placeholder="alex@company.com" 
+                    bind:value={userEmail} 
+                    required 
+                    class="apple-input" 
+                  />
+                </div>
+                <div class="input-field full-width">
+                  <label for="booking-handle" class="input-label">Website or Social Profile <span class="optional">(Optional)</span></label>
+                  <input 
+                    id="booking-handle"
+                    type="text" 
+                    placeholder="https://instagram.com/alex or company.com" 
+                    bind:value={userHandle} 
+                    class="apple-input" 
+                  />
+                </div>
               </div>
             </div>
 
             <div class="modal-actions-split">
-              <button type="button" class="btn btn-secondary" on:click={() => bookingStep = 1}>
-                ← Back
+              <button type="button" class="btn btn-secondary back-btn" on:click={() => bookingStep = 1}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="19" y1="12" x2="5" y2="12"></line>
+                  <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                <span>Back</span>
               </button>
               <button 
                 type="button" 
-                class="btn btn-primary" 
+                class="btn btn-primary confirm-btn" 
                 disabled={!userName.trim() || !userEmail.trim()} 
                 on:click={() => { if (userName.trim() && userEmail.trim()) bookingStep = 3; }}
               >
-                Confirm Strategy Call
+                <span>Confirm Strategy Call</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                  <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
               </button>
             </div>
           </div>
@@ -1027,34 +1321,49 @@
           <!-- Step 3: Success Confirmation -->
           <div class="booking-confirmed animate-fade-in">
             <div class="confirmed-check">
-              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
                 <polyline points="20 6 9 17 4 12"></polyline>
               </svg>
             </div>
 
-            <h3>You're All Set, {userName}!</h3>
+            <h3 class="confirmed-title">You're All Set, {userName}!</h3>
             <p class="confirmed-sub">Your strategy session with Chizzy is officially confirmed.</p>
 
             <div class="booking-summary-card apple-card">
               <div class="summary-row">
-                <span class="sum-label">📅 Date</span>
+                <span class="sum-label">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                  <span>Date</span>
+                </span>
                 <strong>{formatFullDate(selectedDate)}</strong>
               </div>
               <div class="summary-row">
-                <span class="sum-label">⏰ Time</span>
+                <span class="sum-label">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                  <span>Time</span>
+                </span>
                 <strong>{selectedTimeSlot} (WAT)</strong>
               </div>
               <div class="summary-row">
-                <span class="sum-label">🎯 Goal</span>
-                <strong style="text-transform: capitalize;">{contentGoal === 'leads' ? 'Leads & Revenue Growth' : 'Followers & Brand Reach'}</strong>
+                <span class="sum-label">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>
+                  <span>Focus</span>
+                </span>
+                <strong>{contentGoal === 'leads' ? 'Leads & Revenue Growth' : 'Followers & Brand Reach'}</strong>
               </div>
               <div class="summary-row">
-                <span class="sum-label">📩 Invitation</span>
-                <span>Sent to <strong>{userEmail}</strong></span>
+                <span class="sum-label">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                  <span>Invitation</span>
+                </span>
+                <span class="summary-email">Sent to <strong>{userEmail}</strong></span>
               </div>
             </div>
 
-            <p class="meet-notice">Google Meet video link has been sent to your email with calendar invite attached.</p>
+            <div class="meet-pill">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg>
+              <span>Google Meet link and calendar invitation sent to your email.</span>
+            </div>
 
             <button type="button" class="btn btn-primary done-btn" on:click={closeBookingModal}>
               Done
@@ -1065,26 +1374,6 @@
     </div>
   {/if}
 
-  <!-- Test Run Call to Action -->
-  <section class="cta-banner-section">
-    <div class="section-container">
-      <div class="cta-banner apple-card">
-        <span class="section-eyebrow">Zero Risk Trial</span>
-        <h2>Ready to see it on your own content?</h2>
-        <p>We'll repurpose one of your existing videos first, free, so you can see exactly what this looks like before you commit to anything.</p>
-        
-        <div class="cta-action">
-          <button type="button" class="btn btn-primary hero-btn" on:click={openBookingModal}>
-            <span>Book a call for your free sample</span>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-              <line x1="5" y1="12" x2="19" y2="12"></line>
-              <polyline points="12 5 19 12 12 19"></polyline>
-            </svg>
-          </button>
-        </div>
-      </div>
-    </div>
-  </section>
 
   <!-- Free Guide / Lead Magnet Section -->
   <section id="contact" class="guide-section">
@@ -1342,54 +1631,27 @@
     font-size: 1.05rem;
   }
 
-  /* Voice Note Card */
-  .voice-note-section {
-    padding: 30px 0 60px;
+  /* Video Showcase Section */
+  .video-section {
+    padding: 20px 0 60px;
   }
 
-  .voice-card {
-    padding: 36px;
-    border-radius: var(--radius-2xl);
+  .video-card {
+    padding: 24px;
+    border-radius: var(--radius-xl);
+    overflow: hidden;
   }
 
-  .voice-card-header {
+  .video-card-header {
     display: flex;
     align-items: center;
-    gap: 24px;
-    margin-bottom: 32px;
-    padding-bottom: 24px;
+    gap: 16px;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
     border-bottom: 1px solid var(--border-subtle);
   }
 
-  .play-circle-btn {
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
-    background: var(--accent-blue);
-    color: #ffffff;
-    border: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    box-shadow: 0 6px 18px var(--accent-blue-glow);
-    transition: transform var(--duration-fast) var(--ease-apple), background-color var(--duration-fast) var(--ease-apple);
-    flex-shrink: 0;
-  }
-
-  .play-circle-btn:hover {
-    transform: scale(1.06);
-    background: var(--accent-blue-hover);
-  }
-
-  .voice-info {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .voice-meta {
+  .video-meta {
     display: flex;
     align-items: center;
     gap: 12px;
@@ -1406,71 +1668,29 @@
     color: var(--accent-blue);
   }
 
-  .voice-author {
+  .video-author {
     font-size: 0.95rem;
     font-weight: 600;
     color: var(--text-primary);
   }
 
-  .waveform-container {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-  }
-
-  .waveform-bars {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    height: 28px;
-  }
-
-  .progress-track {
-    flex: 1;
-    height: 5px;
-    background: var(--bg-tertiary);
-    border-radius: 10px;
-    overflow: hidden;
+  .video-frame-container {
     position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: #000000;
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.2);
   }
 
-  .progress-fill {
+  .video-frame-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
     height: 100%;
-    background: var(--accent-blue);
-    border-radius: 10px;
-    transition: width 0.3s linear;
-  }
-
-  .timestamp {
-    font-size: 0.8125rem;
-    font-weight: 600;
-    color: var(--text-secondary);
-    font-variant-numeric: tabular-nums;
-  }
-
-  .voice-transcription {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
-
-  .lead-quote {
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: var(--text-primary);
-    line-height: 1.5;
-  }
-
-  .body-paragraphs {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-  }
-
-  .closing-note {
-    font-style: italic;
-    color: var(--accent-blue);
-    font-weight: 500;
+    border: none;
   }
 
   /* Section Header */
@@ -1866,136 +2086,588 @@
     color: var(--text-secondary);
   }
 
-  /* Portfolio Work Section */
+  /* Proof of Work - Apple Bento Grid Showcase */
   .work-section {
-    padding: 90px 0;
+    padding: 100px 0;
     background: var(--bg-secondary);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     border-top: 1px solid var(--border-color);
   }
 
-  .portfolio-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  .espre-bento-grid {
+    display: flex;
+    flex-direction: column;
     gap: 28px;
+    margin-top: 8px;
   }
 
-  .project-card {
+  /* Bento Hero Card (YouTube 16:9 Anchor) */
+  .bento-hero-card {
+    border-radius: var(--radius-2xl);
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 28px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    transition: transform var(--duration-base) var(--ease-apple), box-shadow var(--duration-base) var(--ease-apple);
+  }
+
+  .bento-hero-card:hover {
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.12);
+  }
+
+  .bento-hero-grid {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap: 36px;
+    padding: 28px;
+    align-items: center;
+  }
+
+  @media (max-width: 960px) {
+    .bento-hero-grid {
+      grid-template-columns: 1fr;
+      gap: 24px;
+      padding: 20px;
+    }
+  }
+
+  /* Video Thumbnail Container */
+  .hero-media-wrapper {
+    position: relative;
+    aspect-ratio: 16 / 9;
     border-radius: var(--radius-xl);
     overflow: hidden;
+    background: #09090b;
     cursor: pointer;
-    display: flex;
-    flex-direction: column;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
   }
 
-  .video-container {
-    aspect-ratio: 9/15;
-    background: linear-gradient(180deg, #1c1c1e 0%, #2c2c2e 100%);
-    position: relative;
-    padding: 24px;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    overflow: hidden;
+  .hero-media-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.5s var(--ease-apple);
   }
 
-  .gradient-overlay {
+  .hero-media-wrapper:hover .hero-media-img {
+    transform: scale(1.04);
+  }
+
+  .media-overlay-gradient {
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, transparent 40%, rgba(0, 0, 0, 0.85) 100%);
-    z-index: 1;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.15) 0%, rgba(0, 0, 0, 0.75) 100%);
+    pointer-events: none;
   }
 
-  .play-badge {
+  .media-top-badge {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    z-index: 2;
+  }
+
+  .pill-badge {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #ffffff;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: 4px 12px;
+    border-radius: var(--radius-pill);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .status-dot.yt-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #ff0000;
+    box-shadow: 0 0 8px rgba(255, 0, 0, 0.8);
+  }
+
+  .bento-play-button {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 60px;
-    height: 60px;
+    width: 66px;
+    height: 66px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.95);
     color: #000000;
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 2;
-    transition: transform var(--duration-fast) var(--ease-apple), background-color var(--duration-fast) var(--ease-apple);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 10px 32px rgba(0, 0, 0, 0.4);
+    transition: transform var(--duration-fast) var(--ease-apple), background var(--duration-fast) var(--ease-apple), color var(--duration-fast) var(--ease-apple);
   }
 
-  .project-card:hover .play-badge {
+  .hero-media-wrapper:hover .bento-play-button {
     transform: translate(-50%, -50%) scale(1.12);
     background: var(--accent-blue);
     color: #ffffff;
   }
 
-  .video-card-content {
-    position: relative;
+  .media-bottom-info {
+    position: absolute;
+    bottom: 14px;
+    left: 16px;
     z-index: 2;
   }
 
-  .card-tags {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-    margin-bottom: 8px;
-  }
-
-  .tag-pill {
-    font-size: 0.72rem;
-    font-weight: 600;
-    background: rgba(255, 255, 255, 0.2);
-    color: #ffffff;
+  .media-hint {
+    font-size: 0.76rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.85);
+    background: rgba(0, 0, 0, 0.45);
     backdrop-filter: blur(8px);
-    padding: 2px 8px;
+    padding: 3px 10px;
     border-radius: var(--radius-pill);
   }
 
-  .client-title {
-    font-size: 1.6rem;
-    font-weight: 700;
-    color: #ffffff;
-    margin-bottom: 4px;
+  /* Hero Content Right */
+  .bento-hero-content {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
   }
 
-  .client-stat {
-    font-size: 0.875rem;
-    color: rgba(255, 255, 255, 0.8);
+  .hero-content-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .category-pill {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--accent-blue);
+    background: rgba(0, 113, 227, 0.1);
+    padding: 3px 10px;
+    border-radius: var(--radius-pill);
+    border: 1px solid rgba(0, 113, 227, 0.2);
+  }
+
+  .client-pill {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    background: var(--bg-secondary);
+    padding: 3px 10px;
+    border-radius: var(--radius-pill);
+  }
+
+  .hero-episode-title {
+    font-size: clamp(1.4rem, 2.4vw, 1.85rem);
+    font-weight: 700;
+    line-height: 1.25;
+    color: var(--text-primary);
+    margin: 2px 0 0 0;
+    letter-spacing: -0.015em;
+  }
+
+  .hero-episode-subtitle {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-secondary);
     margin: 0;
   }
 
-  .project-footer {
-    padding: 20px 24px;
+  .hero-episode-desc {
+    font-size: 0.96rem;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    margin: 4px 0 8px 0;
+  }
+
+  .hero-features-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .feature-chip {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+
+  .feature-chip svg {
+    color: var(--accent-green);
+    flex-shrink: 0;
+  }
+
+  .hero-action-buttons {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+  }
+
+  .hero-watch-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 22px;
+    font-weight: 600;
+  }
+
+  .hero-link-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 20px;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  /* Bento Divider Header */
+  .bento-divider-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 16px 0 4px;
+  }
+
+  .divider-line {
+    flex: 1;
+    height: 1px;
+    background: var(--border-color);
+  }
+
+  .divider-text {
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-secondary);
+    text-align: center;
+  }
+
+  /* 3 Social Bento Cards Grid */
+  .bento-social-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  @media (max-width: 960px) {
+    .bento-social-grid {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+  }
+
+  .social-bento-card {
+    display: flex;
+    flex-direction: column;
+    border-radius: var(--radius-xl);
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+    transition: transform var(--duration-base) var(--ease-apple), box-shadow var(--duration-base) var(--ease-apple);
+  }
+
+  .social-bento-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
+  }
+
+  .social-mockup-wrap {
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .social-canvas {
+    height: 220px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 16px;
+    overflow: hidden;
+    background: #111113;
+  }
+
+  .social-canvas.canvas-reel {
+    background: radial-gradient(circle at 85% 15%, rgba(225, 48, 108, 0.28) 0%, #0d0d10 65%);
+  }
+
+  .social-canvas.canvas-carousel {
+    background: radial-gradient(circle at 20% 20%, rgba(0, 113, 227, 0.3) 0%, #0d0d10 65%);
+  }
+
+  .social-top-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: var(--card-bg);
+    z-index: 2;
   }
 
-  .project-desc {
-    font-size: 0.95rem;
-    font-weight: 500;
-    color: var(--text-primary);
+  .ig-badge {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.18);
+  }
+
+  .ratio-pill {
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.7);
+    background: rgba(0, 0, 0, 0.4);
+    padding: 3px 8px;
+    border-radius: var(--radius-pill);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  /* Reel Mockup Frame */
+  .reel-mockup-frame {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    z-index: 2;
+    margin: auto 0;
+  }
+
+  .reel-play-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.95);
+    color: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+    transition: transform var(--duration-fast) var(--ease-apple), background var(--duration-fast) var(--ease-apple), color var(--duration-fast) var(--ease-apple);
+  }
+
+  .social-mockup-wrap:hover .reel-play-icon {
+    transform: scale(1.12);
+    background: #e1306c;
+    color: #ffffff;
+  }
+
+  .audio-wave-bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 4px;
+    height: 20px;
+  }
+
+  .audio-wave-bars span {
+    width: 3px;
+    background: rgba(255, 255, 255, 0.75);
+    border-radius: 2px;
+    animation: waveBar 1.2s ease-in-out infinite alternate;
+  }
+
+  .audio-wave-bars span:nth-child(1) { height: 8px; animation-delay: 0.1s; }
+  .audio-wave-bars span:nth-child(2) { height: 16px; animation-delay: 0.3s; }
+  .audio-wave-bars span:nth-child(3) { height: 10px; animation-delay: 0.2s; }
+  .audio-wave-bars span:nth-child(4) { height: 18px; animation-delay: 0.4s; }
+  .audio-wave-bars span:nth-child(5) { height: 12px; animation-delay: 0.15s; }
+
+  @keyframes waveBar {
+    0% { transform: scaleY(0.4); }
+    100% { transform: scaleY(1.2); }
+  }
+
+  /* Carousel Deck Mockup */
+  .carousel-deck-preview {
+    position: relative;
+    width: 170px;
+    height: 120px;
+    margin: auto auto;
+    z-index: 2;
+  }
+
+  .slide-stack {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: var(--radius-md);
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .slide-stack.slide-3 {
+    top: -8px;
+    right: -8px;
+    transform: rotate(3deg);
+    opacity: 0.3;
+  }
+
+  .slide-stack.slide-2 {
+    top: -4px;
+    right: -4px;
+    transform: rotate(1.5deg);
+    opacity: 0.6;
+  }
+
+  .slide-main {
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius-md);
+    background: #18181b;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    transition: transform var(--duration-fast) var(--ease-apple);
+  }
+
+  .social-mockup-wrap:hover .slide-main {
+    transform: translateY(-2px);
+    border-color: var(--accent-blue);
+  }
+
+  .slide-header-mini {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .slide-espre-tag {
+    font-size: 0.62rem;
+    font-weight: 700;
+    color: var(--accent-blue);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .slide-num {
+    font-size: 0.62rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .slide-mock-headline {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: #ffffff;
+    line-height: 1.3;
     margin: 0;
   }
 
-  .preview-link {
-    font-size: 0.85rem;
+  .slide-bar-decor {
+    height: 3px;
+    width: 40%;
+    background: var(--accent-blue);
+    border-radius: 2px;
+  }
+
+  .social-bottom-tag {
+    z-index: 2;
+  }
+
+  .strategy-tag {
+    font-size: 0.72rem;
     font-weight: 600;
+    color: rgba(255, 255, 255, 0.85);
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(8px);
+    padding: 3px 10px;
+    border-radius: var(--radius-pill);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+  }
+
+  /* Social Card Body */
+  .social-card-body {
+    padding: 22px 20px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+
+  .social-badge-text {
+    font-size: 0.74rem;
+    font-weight: 700;
     color: var(--accent-blue);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  .social-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1.3;
+    margin: 0 0 8px 0;
+  }
+
+  .social-desc {
+    font-size: 0.88rem;
+    line-height: 1.55;
+    color: var(--text-secondary);
+    margin: 0 0 18px 0;
+    flex: 1;
+  }
+
+  .social-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border-color);
+  }
+
+  .social-preview-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.84rem;
+    font-weight: 600;
+    padding: 6px 14px;
+    min-height: 38px;
+    border-radius: var(--radius-pill);
+  }
+
+  .social-external-link {
     display: inline-flex;
     align-items: center;
     gap: 4px;
+    font-size: 0.84rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color 0.2s ease;
   }
 
-  /* Modal Dialog */
+  .social-external-link:hover {
+    color: var(--accent-blue);
+  }
+
+  /* Modal Dialog for Video & Instagram Embeds */
   .modal-backdrop {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.65);
-    backdrop-filter: blur(12px);
+    background: rgba(0, 0, 0, 0.72);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
     z-index: 1000;
     display: flex;
     align-items: center;
@@ -2003,76 +2675,168 @@
     padding: 24px;
   }
 
-  .modal-dialog {
+  .modal-dialog.showcase-modal {
     width: 100%;
-    max-width: 580px;
-    padding: 36px;
+    padding: 30px;
     border-radius: var(--radius-2xl);
     position: relative;
+    max-height: 92vh;
+    overflow-y: auto;
+  }
+
+  .modal-dialog.showcase-modal.modal-youtube {
+    max-width: 860px;
+  }
+
+  .modal-dialog.showcase-modal.modal-instagram {
+    max-width: 480px;
   }
 
   .modal-close-btn {
     position: absolute;
-    top: 20px;
-    right: 20px;
+    top: 18px;
+    right: 18px;
     width: 36px;
     height: 36px;
     border-radius: 50%;
     background: var(--bg-secondary);
-    border: none;
+    border: 1px solid var(--border-color);
     color: var(--text-primary);
     font-size: 1rem;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
+    z-index: 10;
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+
+  .modal-close-btn:hover {
+    transform: scale(1.08);
+    background: var(--border-color);
+  }
+
+  .modal-header-pills {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+
+  .badge-pill.platform-badge.badge-yt {
+    color: #ff0000;
+    border-color: rgba(255, 0, 0, 0.3);
+    background: rgba(255, 0, 0, 0.08);
+  }
+
+  .badge-pill.platform-badge.badge-ig {
+    color: #e1306c;
+    border-color: rgba(225, 48, 108, 0.3);
+    background: rgba(225, 48, 108, 0.08);
   }
 
   .modal-header h3 {
-    margin: 8px 0;
+    margin: 4px 0 16px;
+    font-size: 1.35rem;
+    line-height: 1.3;
+    color: var(--text-primary);
+    padding-right: 40px;
   }
 
-  .modal-stat {
-    color: var(--accent-blue);
-    font-weight: 600;
+  .modal-embed-container {
+    width: 100%;
+    margin-bottom: 20px;
   }
 
-  .mock-player {
-    margin: 24px 0;
-    aspect-ratio: 16/9;
-    background: #000000;
+  .video-iframe-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
     border-radius: var(--radius-lg);
-    display: flex;
-    align-items: center;
-    justify-content: center;
     overflow: hidden;
+    background: #000000;
+    box-shadow: 0 10px 32px rgba(0, 0, 0, 0.4);
   }
 
-  .mock-player-screen {
-    color: #ffffff;
+  .video-iframe-wrapper iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+
+  .instagram-iframe-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    height: 540px;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: #000000;
+    box-shadow: 0 10px 32px rgba(0, 0, 0, 0.4);
+  }
+
+  .instagram-iframe-wrapper iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+
+  .modal-footer-custom {
     display: flex;
-    flex-direction: column;
     align-items: center;
+    justify-content: space-between;
     gap: 12px;
+    flex-wrap: wrap;
+    padding-top: 14px;
+    border-top: 1px solid var(--border-color);
   }
 
-  .pulse-play {
-    width: 64px;
-    height: 64px;
-    border-radius: 50%;
-    background: var(--accent-blue);
-    display: flex;
+  .modal-ext-btn {
+    display: inline-flex;
     align-items: center;
-    justify-content: center;
-    animation: barBounce 1.5s infinite;
+    gap: 6px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    text-decoration: none;
+    padding: 8px 16px;
+  }
+
+  .modal-cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    padding: 8px 18px;
   }
 
   /* Booking Qualification Modal Styles */
+  /* Booking Qualification Modal - Apple Design System */
   .booking-backdrop {
     z-index: 1050;
-    background: rgba(0, 0, 0, 0.72);
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
+    background: rgba(0, 0, 0, 0.68);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    animation: fadeInBackdrop 250ms var(--ease-apple) forwards;
+  }
+
+  @keyframes fadeInBackdrop {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes appleModalAppear {
+    from {
+      opacity: 0;
+      transform: scale(0.96) translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
   }
 
   .booking-dialog {
@@ -2081,50 +2845,150 @@
     overflow-y: auto;
     padding: 36px 40px;
     border-radius: var(--radius-2xl);
+    border: 1px solid var(--glass-border);
+    background: var(--card-bg);
+    backdrop-filter: var(--card-backdrop);
+    -webkit-backdrop-filter: var(--card-backdrop);
+    box-shadow: 0 32px 80px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+    animation: appleModalAppear 320ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  :global([data-theme="dark"]) .booking-dialog {
+    box-shadow: 0 36px 90px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  }
+
+  /* Custom subtle Apple scrollbar */
+  .booking-dialog::-webkit-scrollbar {
+    width: 6px;
+  }
+  .booking-dialog::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 10px;
+  }
+  .booking-dialog::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .modal-close-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--duration-fast) var(--ease-apple);
+    z-index: 10;
+  }
+
+  .modal-close-btn:hover {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    transform: scale(1.06);
   }
 
   .booking-header {
     margin-bottom: 24px;
-    padding-bottom: 18px;
+    padding-bottom: 20px;
     border-bottom: 1px solid var(--border-subtle);
   }
 
-  .booking-progress-pills {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 14px;
-    font-size: 0.8125rem;
-    font-weight: 600;
+  /* Apple Segmented Step Bar */
+  .apple-step-bar {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    padding: 5px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-pill);
+    margin-bottom: 20px;
   }
 
-  .prog-pill {
-    padding: 4px 12px;
+  .step-segment {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 7px 12px;
     border-radius: var(--radius-pill);
-    background: var(--bg-secondary);
+    border: none;
+    background: transparent;
     color: var(--text-tertiary);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    font-family: inherit;
+    cursor: default;
     transition: all var(--duration-fast) var(--ease-apple);
   }
 
-  .prog-pill.active {
-    background: rgba(0, 113, 227, 0.12);
+  .step-segment.active {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
+
+  :global([data-theme="dark"]) .step-segment.active {
+    background: rgba(255, 255, 255, 0.12);
+    color: #ffffff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+  }
+
+  .step-segment.completed {
+    color: var(--accent-blue);
+    cursor: pointer;
+  }
+
+  .step-num {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--bg-tertiary);
+    color: var(--text-secondary);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all var(--duration-fast) var(--ease-apple);
+  }
+
+  .step-segment.active .step-num {
+    background: var(--accent-blue);
+    color: #ffffff;
+  }
+
+  .step-segment.completed .step-num {
+    background: rgba(0, 113, 227, 0.15);
     color: var(--accent-blue);
   }
 
-  .prog-divider {
-    color: var(--text-tertiary);
+  .booking-header-text {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
   }
 
   .booking-title {
-    font-size: 1.5rem;
+    font-size: 1.45rem;
     font-weight: 700;
     color: var(--text-primary);
-    margin-bottom: 4px;
+    letter-spacing: -0.02em;
+    margin: 0;
   }
 
   .booking-sub {
-    font-size: 0.95rem;
+    font-size: 0.925rem;
     color: var(--text-secondary);
+    line-height: 1.5;
     margin: 0;
   }
 
@@ -2132,30 +2996,31 @@
   .qualification-questions {
     display: flex;
     flex-direction: column;
-    gap: 22px;
+    gap: 24px;
   }
 
   .q-block {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 12px;
   }
 
   .q-label {
     display: flex;
     align-items: center;
     gap: 10px;
-    font-size: 1.05rem;
+    font-size: 1rem;
     font-weight: 600;
     color: var(--text-primary);
+    letter-spacing: -0.01em;
   }
 
   .q-num {
-    width: 24px;
-    height: 24px;
+    width: 22px;
+    height: 22px;
     border-radius: 50%;
-    background: var(--accent-blue);
-    color: #ffffff;
+    background: rgba(0, 113, 227, 0.12);
+    color: var(--accent-blue);
     font-size: 0.75rem;
     font-weight: 700;
     display: flex;
@@ -2174,9 +3039,9 @@
     display: flex;
     align-items: center;
     gap: 14px;
-    padding: 12px 18px;
+    padding: 13px 18px;
     background: var(--bg-primary);
-    border: 1px solid var(--border-color);
+    border: 1.5px solid var(--border-color);
     border-radius: var(--radius-md);
     cursor: pointer;
     text-align: left;
@@ -2187,31 +3052,40 @@
 
   .option-card:hover {
     background: var(--bg-secondary);
-    border-color: rgba(0, 113, 227, 0.3);
-    transform: translateY(-1px);
+    border-color: rgba(0, 113, 227, 0.35);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.04);
   }
 
   .option-card.selected {
-    background: rgba(0, 113, 227, 0.08);
+    background: rgba(0, 113, 227, 0.05);
     border-color: var(--accent-blue);
-    box-shadow: 0 0 0 1px var(--accent-blue);
+    box-shadow: 0 0 0 1px var(--accent-blue), 0 8px 22px var(--accent-blue-glow);
   }
 
-  .opt-radio {
-    width: 20px;
-    height: 20px;
+  :global([data-theme="dark"]) .option-card.selected {
+    background: rgba(0, 113, 227, 0.12);
+    border-color: var(--accent-blue);
+  }
+
+  .opt-check {
+    width: 22px;
+    height: 22px;
     border-radius: 50%;
     border: 2px solid var(--border-color);
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--accent-blue);
-    font-size: 0.8rem;
     flex-shrink: 0;
+    transition: all var(--duration-fast) var(--ease-apple);
+    background: transparent;
   }
 
-  .option-card.selected .opt-radio {
+  .opt-check.selected {
+    background: var(--accent-blue);
     border-color: var(--accent-blue);
+    color: #ffffff;
+    box-shadow: 0 2px 8px var(--accent-blue-glow);
   }
 
   .opt-text {
@@ -2222,25 +3096,31 @@
   }
 
   .opt-text strong {
-    font-size: 0.95rem;
+    font-size: 0.9375rem;
     font-weight: 600;
     color: var(--text-primary);
   }
 
   .opt-text span {
-    font-size: 0.825rem;
+    font-size: 0.8125rem;
     color: var(--text-secondary);
+    line-height: 1.4;
   }
 
   .opt-badge {
-    font-size: 0.725rem;
+    font-size: 0.7rem;
     font-weight: 700;
-    padding: 3px 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 3px 9px;
     border-radius: var(--radius-pill);
     background: rgba(0, 113, 227, 0.12);
     color: var(--accent-blue);
+    border: 1px solid rgba(0, 113, 227, 0.2);
+    white-space: nowrap;
   }
 
+  /* Fit Callouts (Apple Intelligence Style) */
   .fit-callout {
     display: flex;
     align-items: flex-start;
@@ -2249,29 +3129,33 @@
     border-radius: var(--radius-lg);
     font-size: 0.9rem;
     line-height: 1.5;
+    backdrop-filter: blur(12px);
+    transition: all var(--duration-base) var(--ease-apple);
   }
 
   .fit-callout.ideal {
-    background: rgba(52, 199, 89, 0.12);
-    border: 1px solid rgba(52, 199, 89, 0.25);
+    background: rgba(52, 199, 89, 0.1);
+    border: 1px solid rgba(52, 199, 89, 0.28);
     color: var(--text-primary);
   }
 
   .fit-callout.guidance {
     background: rgba(0, 113, 227, 0.08);
-    border: 1px solid rgba(0, 113, 227, 0.2);
+    border: 1px solid rgba(0, 113, 227, 0.22);
     color: var(--text-primary);
   }
 
   .fit-callout-icon {
     font-size: 1.25rem;
+    line-height: 1;
     flex-shrink: 0;
+    margin-top: 1px;
   }
 
   .modal-actions {
     display: flex;
     justify-content: flex-end;
-    margin-top: 6px;
+    margin-top: 8px;
   }
 
   .modal-actions-split {
@@ -2282,10 +3166,29 @@
     gap: 14px;
   }
 
-  .next-btn {
-    width: 100%;
+  .next-btn,
+  .confirm-btn {
     padding: 0.9rem 1.8rem;
-    font-size: 1rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    box-shadow: 0 4px 16px var(--accent-blue-glow);
+  }
+
+  .next-btn:hover,
+  .confirm-btn:hover {
+    box-shadow: 0 8px 24px var(--accent-blue-glow);
+  }
+
+  .confirm-btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
+  }
+
+  .back-btn {
+    padding: 0.9rem 1.5rem;
+    font-size: 0.95rem;
   }
 
   /* Calendar Step Styles */
@@ -2298,7 +3201,7 @@
   .calendar-layout {
     display: grid;
     grid-template-columns: 1.35fr 1fr;
-    gap: 18px;
+    gap: 16px;
     padding: 18px;
     background: var(--bg-secondary);
     border-radius: var(--radius-xl);
@@ -2307,10 +3210,10 @@
 
   .cal-section-title {
     display: block;
-    font-size: 0.8125rem;
+    font-size: 0.775rem;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.07em;
     color: var(--text-secondary);
     margin-bottom: 12px;
   }
@@ -2322,6 +3225,14 @@
     max-height: 220px;
     overflow-y: auto;
     padding-right: 4px;
+  }
+
+  .dates-scroll-grid::-webkit-scrollbar {
+    width: 4px;
+  }
+  .dates-scroll-grid::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 4px;
   }
 
   .date-pill {
@@ -2340,31 +3251,33 @@
   .date-pill:hover {
     background: var(--bg-tertiary);
     border-color: var(--accent-blue);
+    transform: translateY(-1px);
   }
 
   .date-pill.selected {
     background: var(--accent-blue);
     border-color: var(--accent-blue);
-    box-shadow: 0 4px 12px var(--accent-blue-glow);
+    box-shadow: 0 4px 14px var(--accent-blue-glow);
   }
 
   .day-name {
-    font-size: 0.725rem;
+    font-size: 0.7rem;
     font-weight: 600;
     text-transform: uppercase;
+    letter-spacing: 0.05em;
     color: var(--text-secondary);
   }
 
   .day-num {
-    font-size: 1.2rem;
+    font-size: 1.25rem;
     font-weight: 700;
     line-height: 1.1;
-    margin: 2px 0;
+    margin: 3px 0;
     color: var(--text-primary);
   }
 
   .day-month {
-    font-size: 0.7rem;
+    font-size: 0.6875rem;
     color: var(--text-tertiary);
   }
 
@@ -2385,7 +3298,7 @@
     border-radius: var(--radius-pill);
     background: var(--bg-primary);
     border: 1px solid var(--border-color);
-    font-size: 0.875rem;
+    font-size: 0.85rem;
     font-weight: 600;
     color: var(--text-primary);
     cursor: pointer;
@@ -2397,13 +3310,14 @@
   .time-pill:hover {
     background: var(--bg-tertiary);
     border-color: var(--accent-blue);
+    transform: translateY(-1px);
   }
 
   .time-pill.selected {
     background: var(--accent-blue);
     border-color: var(--accent-blue);
     color: #ffffff;
-    box-shadow: 0 4px 12px var(--accent-blue-glow);
+    box-shadow: 0 4px 14px var(--accent-blue-glow);
   }
 
   /* Booking Inputs */
@@ -2418,26 +3332,51 @@
     gap: 12px;
   }
 
+  .input-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .input-field.full-width {
+    grid-column: span 2;
+  }
+
+  .input-label {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .input-label .required {
+    color: var(--accent-red);
+  }
+
+  .input-label .optional {
+    color: var(--text-tertiary);
+    font-weight: 400;
+    font-size: 0.75rem;
+  }
+
   .apple-input {
     width: 100%;
-    padding: 12px 18px;
-    border-radius: var(--radius-pill);
+    padding: 12px 16px;
+    border-radius: var(--radius-md);
     background: var(--bg-primary);
-    border: 1px solid var(--border-color);
+    border: 1.5px solid var(--border-color);
     color: var(--text-primary);
     font-size: 0.95rem;
     font-family: inherit;
     outline: none;
-    transition: border-color var(--duration-fast) var(--ease-apple), box-shadow var(--duration-fast) var(--ease-apple);
+    transition: all var(--duration-fast) var(--ease-apple);
   }
 
   .apple-input:focus {
     border-color: var(--accent-blue);
-    box-shadow: 0 0 0 3px var(--accent-blue-glow);
-  }
-
-  .apple-input.full-width {
-    grid-column: span 2;
+    box-shadow: 0 0 0 3.5px var(--accent-blue-glow);
   }
 
   /* Confirmation Screen */
@@ -2446,12 +3385,12 @@
     flex-direction: column;
     align-items: center;
     text-align: center;
-    padding: 24px 0;
+    padding: 28px 0 10px;
   }
 
   .confirmed-check {
-    width: 72px;
-    height: 72px;
+    width: 64px;
+    height: 64px;
     border-radius: 50%;
     background: rgba(52, 199, 89, 0.15);
     color: var(--accent-green);
@@ -2459,33 +3398,44 @@
     align-items: center;
     justify-content: center;
     margin-bottom: 20px;
-    box-shadow: 0 0 24px rgba(52, 199, 89, 0.35);
+    box-shadow: 0 0 28px rgba(52, 199, 89, 0.35);
+  }
+
+  .confirmed-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: -0.02em;
+    margin: 0 0 6px 0;
   }
 
   .confirmed-sub {
-    font-size: 1.05rem;
+    font-size: 0.95rem;
     color: var(--text-secondary);
-    margin-bottom: 24px;
+    margin: 0 0 24px 0;
   }
 
+  /* Apple Wallet Receipt Card */
   .booking-summary-card {
     width: 100%;
-    max-width: 440px;
-    padding: 24px;
-    border-radius: var(--radius-lg);
+    max-width: 460px;
+    padding: 22px 24px;
+    border-radius: var(--radius-xl);
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: 12px;
     text-align: left;
-    margin-bottom: 20px;
+    margin-bottom: 18px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
   }
 
   .summary-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 0.925rem;
-    padding-bottom: 8px;
+    font-size: 0.9rem;
+    padding-bottom: 10px;
     border-bottom: 1px solid var(--border-subtle);
   }
 
@@ -2495,54 +3445,71 @@
   }
 
   .sum-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
     color: var(--text-secondary);
+    font-weight: 500;
   }
 
-  .meet-notice {
-    font-size: 0.875rem;
-    color: var(--text-tertiary);
+  .sum-label svg {
+    color: var(--accent-blue);
+  }
+
+  .summary-email {
+    color: var(--text-primary);
+  }
+
+  .meet-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-radius: var(--radius-pill);
+    background: rgba(0, 113, 227, 0.08);
+    border: 1px solid rgba(0, 113, 227, 0.2);
+    color: var(--accent-blue);
+    font-size: 0.8125rem;
+    font-weight: 500;
     margin-bottom: 24px;
+    text-align: center;
   }
 
   .done-btn {
     min-width: 160px;
+    padding: 0.85rem 2rem;
   }
 
   @media (max-width: 650px) {
     .booking-dialog {
-      padding: 24px;
+      padding: 22px 18px;
+      max-height: 94vh;
+    }
+    .apple-step-bar {
+      gap: 3px;
+      padding: 3px;
+    }
+    .step-segment {
+      padding: 6px 8px;
+      font-size: 0.725rem;
+      gap: 5px;
+    }
+    .step-text {
+      display: inline-block;
     }
     .calendar-layout {
       grid-template-columns: 1fr;
+      padding: 14px;
+    }
+    .dates-scroll-grid {
+      grid-template-columns: repeat(4, 1fr);
     }
     .inputs-grid {
       grid-template-columns: 1fr;
     }
-    .apple-input.full-width {
+    .input-field.full-width {
       grid-column: span 1;
     }
-  }
-
-  /* CTA Banner */
-  .cta-banner-section {
-    padding: 70px 0;
-  }
-
-  .cta-banner {
-    padding: 60px 40px;
-    text-align: center;
-    background: linear-gradient(135deg, var(--card-bg) 0%, rgba(0, 113, 227, 0.08) 100%);
-    border-color: rgba(0, 113, 227, 0.2);
-  }
-
-  .cta-banner h2 {
-    margin: 12px 0 16px;
-  }
-
-  .cta-banner p {
-    max-width: 620px;
-    margin: 0 auto 36px;
-    font-size: 1.15rem;
   }
 
   /* Guide Section / Lead Magnet */
@@ -2734,9 +3701,15 @@
   }
 
   @media (max-width: 600px) {
-    .voice-card-header {
-      flex-direction: column;
-      align-items: flex-start;
+    .video-card {
+      padding: 14px;
+    }
+    .video-card-header {
+      margin-bottom: 12px;
+      padding-bottom: 12px;
+    }
+    .video-author {
+      font-size: 0.825rem;
     }
     .input-wrapper {
       flex-direction: column;

@@ -61,13 +61,36 @@
   // Lead magnet email submission
   let emailInput = '';
   let emailSubmitted = false;
-  function handleEmailSubmit() {
-    if (emailInput.trim()) {
+  let isSendingGuide = false;
+  let guideError = '';
+
+  async function handleEmailSubmit() {
+    if (!emailInput.trim()) return;
+    isSendingGuide = true;
+    guideError = '';
+
+    try {
+      const response = await fetch('/api/send-guide', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: emailInput.trim() })
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to send guide. Please try again.');
+      }
+
       emailSubmitted = true;
+      emailInput = '';
       setTimeout(() => {
         emailSubmitted = false;
-        emailInput = '';
-      }, 4000);
+      }, 8000);
+    } catch (err) {
+      console.error('Error sending guide:', err);
+      guideError = err.message || 'Something went wrong. Please check your email and try again.';
+    } finally {
+      isSendingGuide = false;
     }
   }
 
@@ -168,13 +191,57 @@
   let selectedTimeSlot = '2:00 PM';
   const timeSlots = ['10:00 AM', '11:30 AM', '2:00 PM', '3:30 PM', '5:00 PM'];
 
+  let isSubmitting = false;
+  let submitError = '';
+
+  async function handleBookingSubmit() {
+    if (!userName.trim() || !userEmail.trim()) return;
+    isSubmitting = true;
+    submitError = '';
+
+    try {
+      const response = await fetch('/api/book-call', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          userName: userName.trim(),
+          userEmail: userEmail.trim(),
+          userHandle: userHandle.trim(),
+          selectedDate,
+          selectedTimeSlot,
+          hasOffer,
+          leadSystem,
+          contentGoal
+        })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to confirm booking. Please try again.');
+      }
+
+      // Successfully recorded and sent emails
+      bookingStep = 3;
+    } catch (err) {
+      console.error('Booking submission error:', err);
+      submitError = err.message || 'Something went wrong while confirming your call. Please try again.';
+    } finally {
+      isSubmitting = false;
+    }
+  }
+
   function openBookingModal() {
     isBookingOpen = true;
     bookingStep = 1;
+    submitError = '';
   }
 
   function closeBookingModal() {
     isBookingOpen = false;
+    submitError = '';
   }
 
   function formatDate(d) {
@@ -1294,8 +1361,19 @@
               </div>
             </div>
 
+            {#if submitError}
+              <div class="booking-error-banner animate-fade-in">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="12" y1="8" x2="12" y2="12"></line>
+                  <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                </svg>
+                <span>{submitError}</span>
+              </div>
+            {/if}
+
             <div class="modal-actions-split">
-              <button type="button" class="btn btn-secondary back-btn" on:click={() => bookingStep = 1}>
+              <button type="button" class="btn btn-secondary back-btn" on:click={() => { bookingStep = 1; submitError = ''; }} disabled={isSubmitting}>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                   <line x1="19" y1="12" x2="5" y2="12"></line>
                   <polyline points="12 19 5 12 12 5"></polyline>
@@ -1305,14 +1383,19 @@
               <button 
                 type="button" 
                 class="btn btn-primary confirm-btn" 
-                disabled={!userName.trim() || !userEmail.trim()} 
-                on:click={() => { if (userName.trim() && userEmail.trim()) bookingStep = 3; }}
+                disabled={!userName.trim() || !userEmail.trim() || isSubmitting} 
+                on:click={handleBookingSubmit}
               >
-                <span>Confirm Strategy Call</span>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                  <line x1="5" y1="12" x2="19" y2="12"></line>
-                  <polyline points="12 5 19 12 12 19"></polyline>
-                </svg>
+                {#if isSubmitting}
+                  <span class="apple-spinner"></span>
+                  <span>Securing Slot...</span>
+                {:else}
+                  <span>Confirm Strategy Call</span>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                  </svg>
+                {/if}
               </button>
             </div>
           </div>
@@ -1327,7 +1410,7 @@
             </div>
 
             <h3 class="confirmed-title">You're All Set, {userName}!</h3>
-            <p class="confirmed-sub">Your strategy session with Chizzy is officially confirmed.</p>
+            <p class="confirmed-sub">Your strategy session with Chizzy is officially confirmed. A thank-you email with Google Meet details has been sent to your email.</p>
 
             <div class="booking-summary-card apple-card">
               <div class="summary-row">
@@ -1428,10 +1511,14 @@
                 placeholder="Enter your email address" 
                 bind:value={emailInput}
                 required
+                disabled={isSendingGuide}
                 aria-label="Email address"
               />
-              <button type="submit" class="btn btn-primary form-btn">
-                {#if emailSubmitted}
+              <button type="submit" class="btn btn-primary form-btn" disabled={isSendingGuide}>
+                {#if isSendingGuide}
+                  <span class="apple-spinner"></span>
+                  <span>Sending...</span>
+                {:else if emailSubmitted}
                   <span>✓ Guide Sent!</span>
                 {:else}
                   <span>Send me the guide</span>
@@ -1440,7 +1527,10 @@
             </div>
           </form>
           {#if emailSubmitted}
-            <p class="success-note animate-fade-in">Check your inbox — we just sent over the hiring blueprint and AI prompt templates!</p>
+            <p class="success-note animate-fade-in">✓ Check your inbox — we just sent the Google Docs link to your email!</p>
+          {/if}
+          {#if guideError}
+            <p class="guide-error-note animate-fade-in">{guideError}</p>
           {/if}
         </div>
       </div>
@@ -3166,12 +3256,44 @@
     gap: 14px;
   }
 
+  .booking-error-banner {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255, 69, 58, 0.12);
+    border: 1px solid rgba(255, 69, 58, 0.3);
+    color: #ff453a;
+    padding: 12px 16px;
+    border-radius: var(--radius-md);
+    font-size: 0.88rem;
+    font-weight: 500;
+    margin-top: 18px;
+    backdrop-filter: blur(8px);
+  }
+
+  .apple-spinner {
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: #ffffff;
+    border-radius: 50%;
+    animation: appleSpinner 0.7s linear infinite;
+    display: inline-block;
+  }
+
+  @keyframes appleSpinner {
+    to { transform: rotate(360deg); }
+  }
+
   .next-btn,
   .confirm-btn {
     padding: 0.9rem 1.8rem;
     font-size: 0.95rem;
     font-weight: 600;
     box-shadow: 0 4px 16px var(--accent-blue-glow);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
   }
 
   .next-btn:hover,
@@ -3612,6 +3734,13 @@
     color: var(--accent-green);
     font-weight: 600;
     font-size: 0.95rem;
+  }
+
+  .guide-error-note {
+    margin-top: 14px;
+    color: #ff453a;
+    font-weight: 500;
+    font-size: 0.9rem;
   }
 
   /* Footer */

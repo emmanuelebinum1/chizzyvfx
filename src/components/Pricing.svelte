@@ -2,13 +2,13 @@
   // Pricing component
   const tiers = [
     {
-      price: "₦250k",
+      price: "₦350k",
       name: "Starting tier",
       desc: "Where every client begins",
       scope: "Full scope, from day one"
     },
     {
-      price: "₦350k",
+      price: "₦450k",
       name: "Tier 2",
       desc: "After 50k views across platforms + 50 tracked leads in a month",
       scope: "Same scope, proven results"
@@ -49,7 +49,7 @@
     
     <div class="with-us">
       <span class="starting-label">Starting with us</span>
-      <div class="price-highlight">₦250k</div>
+      <div class="price-highlight">₦350k</div>
       <span class="sub-desc">one team, nothing to manage</span>
     </div>
   </div>

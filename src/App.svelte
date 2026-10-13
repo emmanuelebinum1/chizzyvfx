@@ -17,7 +17,7 @@
   let selectedTier = 0;
   const tiers = [
     {
-      price: '₦250k',
+      price: '₦350k',
       period: '/mo',
       name: 'Starting tier',
       metric: 'Where every client begins',
@@ -25,7 +25,7 @@
       popular: true
     },
     {
-      price: '₦350k',
+      price: '₦450k',
       period: '/mo',
       name: 'Tier 2',
       metric: 'After 50k views across platforms + 50 tracked leads in a month',
@@ -654,7 +654,7 @@
 
         <div class="comp-col chizzy">
           <span class="comp-tag active-tag">Starting With Us</span>
-          <div class="chizzy-price">₦250k<span>/mo</span></div>
+          <div class="chizzy-price">₦350k<span>/mo</span></div>
           <p>One unified specialist team, zero management overhead, full execution.</p>
         </div>
       </div>
@@ -1260,7 +1260,7 @@
               <div class="fit-callout ideal">
                 <div class="fit-callout-icon">✨</div>
                 <div>
-                  <strong>Ideal Match:</strong> You already have an offer and want direct leads. That's the exact blueprint we use to scale from ₦250k to high performance.
+                  <strong>Ideal Match:</strong> You already have an offer and want direct leads. That's the exact blueprint we use to scale from ₦350k to high performance.
                 </div>
               </div>
             {:else if contentGoal === 'followers' || hasOffer === 'no'}

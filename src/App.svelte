@@ -345,28 +345,29 @@
   </header>
 
   <!-- Video Showcase Section -->
-  <section class="video-section" id="video">
-    <div class="section-container">
-      <div class="video-card apple-card">
-        <div class="video-card-header">
-          <div class="video-meta">
-            <span class="badge-pill">Overview</span>
-            <span class="video-author">A message from Chizzy — 2 min</span>
-          </div>
-        </div>
-
-        <div class="video-frame-container">
-          <iframe 
-            src="https://drive.google.com/file/d/1YSwXEPACpG1911hAzZsBEuWAE4EmW9if/preview" 
-            title="A message from Chizzy"
-            allow="autoplay; fullscreen; picture-in-picture"
-            allowfullscreen
-            loading="lazy"
-          ></iframe>
+<section class="video-section" id="video">
+  <div class="section-container">
+    <div class="video-card apple-card">
+      <div class="video-card-header">
+        <div class="video-meta">
+          <span class="badge-pill">Overview</span>
+          <span class="video-author">A message from Chizzy — 2 min</span>
         </div>
       </div>
+
+      <div class="video-frame-container">
+        <iframe
+          src="https://www.youtube-nocookie.com/embed/9TD0GZrjj0w?rel=0&modestbranding=1"
+          title="A message from Chizzy"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerpolicy="strict-origin-when-cross-origin"
+          allowfullscreen
+          loading="lazy"
+        ></iframe>
+      </div>
     </div>
-  </section>
+  </div>
+</section>
 
   <!-- The Problem Section (Apple Bento Style) -->
   <section class="problem-section">
@@ -641,7 +642,7 @@
       <div class="pricing-comparison apple-card">
         <div class="comp-col traditional">
           <span class="comp-tag">Traditional Setup</span>
-          <div class="strikethrough-price">₦450k+</div>
+          <div class="strikethrough-price">₦750k+</div>
           <p>SMM + Video Editor + Scriptwriter, separately managed & paid.</p>
         </div>
 

@@ -41,7 +41,7 @@
   <div class="comparison-card">
     <div class="traditional">
       <span class="label">Traditional setup</span>
-      <div class="price-strikethrough">₦450k+</div>
+      <div class="price-strikethrough">₦750k+</div>
       <p class="sub-desc">SMM + editor + scriptwriter, separately managed</p>
     </div>
     

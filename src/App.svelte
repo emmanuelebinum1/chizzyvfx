@@ -905,10 +905,22 @@
               </div>
             </div>
           {/each}
-        </div>
+        
+      <!-- CTA under Proof of Work -->
+      <div class="work-cta">
+        <h3 class="work-cta-title">Want results like this for your brand?</h3>
+        <p class="work-cta-sub">One recording in, a full week of content out. Let's map it out for you.</p>
+        <button type="button" class="btn btn-primary hero-btn" on:click={openBookingModal}>
+          <span>Book a strategy call</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </button>
       </div>
     </div>
   </section>
+  
 
   <!-- Interactive Project Video / Embed Modal -->
   {#if activeWork}
@@ -2750,6 +2762,31 @@
 
   .social-external-link:hover {
     color: var(--accent-blue);
+  }
+
+    /* CTA under Proof of Work */
+  .work-cta {
+    margin-top: 56px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .work-cta-title {
+    font-size: clamp(1.4rem, 2.6vw, 1.9rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+    margin: 0;
+  }
+
+  .work-cta-sub {
+    font-size: 1.05rem;
+    color: var(--text-secondary);
+    max-width: 520px;
+    margin: 0 0 12px;
   }
 
   /* Modal Dialog for Video & Instagram Embeds */

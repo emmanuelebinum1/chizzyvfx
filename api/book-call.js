@@ -5,6 +5,8 @@ import dotenv from 'dotenv';
 dotenv.config();
 // Google Meet link shown in booking emails (can be overridden via .env)
 const MEET_LINK = process.env.MEET_LINK || 'https://meet.google.com/ovj-ouuv-ufh';
+// "Watch this first" prep video (can be overridden via .env)
+const PREP_VIDEO_LINK = process.env.PREP_VIDEO_LINK || 'https://drive.google.com/file/d/1UR0QWSS2rak9RUouboA6nyECjgX1_aal/view?usp=drivesdk';
 /**
  * Formats qualification answers into readable labels
  */
@@ -137,7 +139,7 @@ function createClientEmailHtml({ userName, dateStr, timeSlot, contentGoal }) {
     .agenda-title { font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #1d1d1f; margin: 24px 0 12px 0; }
     .agenda-item { display: flex; gap: 12px; margin-bottom: 12px; font-size: 14px; line-height: 1.5; color: #424245; }
     .agenda-num { background: #0071e3; color: #ffffff; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; }
-        .meet-card { background: rgba(0, 113, 227, 0.06); border: 1px solid rgba(0, 113, 227, 0.2); border-radius: 14px; padding: 22px 20px; margin: 20px 0; text-align: center; }
+    .meet-card { background: rgba(0, 113, 227, 0.06); border: 1px solid rgba(0, 113, 227, 0.2); border-radius: 14px; padding: 22px 20px; margin: 20px 0; text-align: center; }
     .meet-eyebrow { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #0071e3; margin-bottom: 6px; }
     .meet-text { font-size: 14px; line-height: 1.5; color: #515154; margin: 0 0 16px 0; }
     .meet-url { font-size: 12px; color: #86868b; margin-top: 12px; word-break: break-all; }
@@ -146,6 +148,14 @@ function createClientEmailHtml({ userName, dateStr, timeSlot, contentGoal }) {
       .content { padding: 24px 20px; }
       .meet-btn { display: block !important; }
     }
+    .prep-card { background: #000000; border-radius: 14px; padding: 24px 22px; margin: 20px 0; text-align: center; }
+    .prep-eyebrow { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #2997ff; margin-bottom: 8px; }
+    .prep-title { font-size: 18px; font-weight: 700; color: #ffffff; margin: 0 0 8px 0; line-height: 1.3; }
+    .prep-text { font-size: 14px; line-height: 1.6; color: #a1a1a6; margin: 0 0 18px 0; }
+    @media (max-width: 480px) {
+      .prep-card { padding: 22px 16px; }
+      .prep-btn { display: block !important; }
+    }  
     .note-box { background: rgba(0, 113, 227, 0.06); border-left: 3px solid #0071e3; border-radius: 6px; padding: 12px 16px; margin: 24px 0 16px 0; font-size: 13px; color: #1d1d1f; line-height: 1.5; }
     .footer { padding: 24px 32px; background: #fbfbfd; text-align: center; font-size: 12px; color: #86868b; border-top: 1px solid #e5e5ea; }
   </style>
@@ -185,6 +195,12 @@ function createClientEmailHtml({ userName, dateStr, timeSlot, contentGoal }) {
         <p class="meet-text">Click the button below at your scheduled time to join the call.</p>
         <a href="${MEET_LINK}" target="_blank" class="meet-btn" style="display: inline-block; background: #0071e3; color: #ffffff; text-decoration: none; font-weight: 600; font-size: 15px; padding: 13px 28px; border-radius: 980px; text-align: center;">Join Google Meet</a>
         <div class="meet-url">${MEET_LINK.replace('https://', '')}</div>
+      </div>
+      <div class="prep-card">
+        <div class="prep-eyebrow">Watch This First • 90 seconds</div>
+        <h3 class="prep-title">See how the call will go</h3>
+        <p class="prep-text">Before we meet, watch this 90-second video on how the call will go. It helps us use the time well.</p>
+        <a href="${PREP_VIDEO_LINK}" target="_blank" class="prep-btn" style="display: inline-block; background: #ffffff; color: #000000; text-decoration: none; font-weight: 600; font-size: 15px; padding: 13px 28px; border-radius: 980px; text-align: center;">&#9654;&nbsp; Watch the video</a>
       </div>
       <div class="agenda-title">What We'll Cover on the Call</div>
       <div class="agenda-item">

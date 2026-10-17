@@ -175,7 +175,7 @@ function createClientEmailHtml({ userName, dateStr, timeSlot, contentGoal }) {
       <div class="booking-card">
         <div class="booking-row">
           <span class="b-label">Date</span>
-          <span class="b-val"> ${dateStr}</span>
+          <span class="b-val">: ${dateStr}</span>
         </div>
         <div class="booking-row">
           <span class="b-label">Time</span>
@@ -183,19 +183,14 @@ function createClientEmailHtml({ userName, dateStr, timeSlot, contentGoal }) {
         </div>
         <div class="booking-row">
           <span class="b-label">Platform</span>
-          <span class="b-val"><a href="${MEET_LINK}" style="color: #0071e3; text-decoration: none;">Google Meet</a></span>
+          <span class="b-val">: <a href="${MEET_LINK}" style="color: #0071e3; text-decoration: none;">Google Meet</a></span>
         </div>
         <div class="booking-row">
           <span class="b-label">Session Focus</span>
-          <span class="b-val">${getGoalLabel(contentGoal)}</span>
+          <span class="b-val">: ${getGoalLabel(contentGoal)}</span>
         </div>
       </div>
-      <div class="meet-card">
-        <div class="meet-eyebrow">Your Meeting Link</div>
-        <p class="meet-text">Click the button below at your scheduled time to join the call.</p>
-        <a href="${MEET_LINK}" target="_blank" class="meet-btn" style="display: inline-block; background: #0071e3; color: #ffffff; text-decoration: none; font-weight: 600; font-size: 15px; padding: 13px 28px; border-radius: 980px; text-align: center;">Join Google Meet</a>
-        <div class="meet-url">${MEET_LINK.replace('https://', '')}</div>
-      </div>
+      
       <div class="prep-card">
         <div class="prep-eyebrow">Watch This First • 90 seconds</div>
         <h3 class="prep-title">See how the call will go</h3>
@@ -214,6 +209,12 @@ function createClientEmailHtml({ userName, dateStr, timeSlot, contentGoal }) {
       <div class="agenda-item">
         <div class="agenda-num">3</div>
         <div><strong>Economic Feasibility & Roadmap:</strong> Exact timelines and pricing for a turnkey content system that delivers qualified leads.</div>
+      </div>
+      <div class="meet-card">
+        <div class="meet-eyebrow">Your Meeting Link</div>
+        <p class="meet-text">Click the button below at your scheduled time to join the call.</p>
+        <a href="${MEET_LINK}" target="_blank" class="meet-btn" style="display: inline-block; background: #0071e3; color: #ffffff; text-decoration: none; font-weight: 600; font-size: 15px; padding: 13px 28px; border-radius: 980px; text-align: center;">Join Google Meet</a>
+        <div class="meet-url">${MEET_LINK.replace('https://', '')}</div>
       </div>
 
       <div class="note-box">

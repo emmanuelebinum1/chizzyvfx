@@ -3,7 +3,8 @@ import dotenv from 'dotenv';
 
 // Load environment variables
 dotenv.config();
-
+// Google Meet link shown in booking emails (can be overridden via .env)
+const MEET_LINK = process.env.MEET_LINK || 'https://meet.google.com/ovj-ouuv-ufh';
 /**
  * Formats qualification answers into readable labels
  */
@@ -64,6 +65,7 @@ function createAdminEmailHtml({ userName, userEmail, userHandle, dateStr, timeSl
         <div style="font-size: 12px; color: #86868b; text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em; margin-bottom: 4px;">Scheduled Session</div>
         <div style="font-size: 18px; font-weight: 700; color: #ffffff;">${dateStr}</div>
         <div style="font-size: 15px; color: #2997ff; font-weight: 600; margin-top: 2px;">${timeSlot} (WAT / GMT+1)</div>
+        <div style="font-size: 13px; color: #a1a1a6; margin-top: 10px;">Meet: <a href="${MEET_LINK}" style="color: #2997ff; text-decoration: none;">${MEET_LINK.replace('https://', '')}</a></div>
       </div>
 
       <div class="section-title">Lead Information</div>
@@ -135,6 +137,15 @@ function createClientEmailHtml({ userName, dateStr, timeSlot, contentGoal }) {
     .agenda-title { font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #1d1d1f; margin: 24px 0 12px 0; }
     .agenda-item { display: flex; gap: 12px; margin-bottom: 12px; font-size: 14px; line-height: 1.5; color: #424245; }
     .agenda-num { background: #0071e3; color: #ffffff; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; }
+        .meet-card { background: rgba(0, 113, 227, 0.06); border: 1px solid rgba(0, 113, 227, 0.2); border-radius: 14px; padding: 22px 20px; margin: 20px 0; text-align: center; }
+    .meet-eyebrow { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #0071e3; margin-bottom: 6px; }
+    .meet-text { font-size: 14px; line-height: 1.5; color: #515154; margin: 0 0 16px 0; }
+    .meet-url { font-size: 12px; color: #86868b; margin-top: 12px; word-break: break-all; }
+    @media (max-width: 480px) {
+      body { padding: 12px; }
+      .content { padding: 24px 20px; }
+      .meet-btn { display: block !important; }
+    }
     .note-box { background: rgba(0, 113, 227, 0.06); border-left: 3px solid #0071e3; border-radius: 6px; padding: 12px 16px; margin: 24px 0 16px 0; font-size: 13px; color: #1d1d1f; line-height: 1.5; }
     .footer { padding: 24px 32px; background: #fbfbfd; text-align: center; font-size: 12px; color: #86868b; border-top: 1px solid #e5e5ea; }
   </style>
@@ -162,14 +173,19 @@ function createClientEmailHtml({ userName, dateStr, timeSlot, contentGoal }) {
         </div>
         <div class="booking-row">
           <span class="b-label">Platform</span>
-          <span class="b-val"> :Google Meet</span>
+          <span class="b-val"><a href="${MEET_LINK}" style="color: #0071e3; text-decoration: none;">Google Meet</a></span>
         </div>
         <div class="booking-row">
           <span class="b-label">Session Focus</span>
           <span class="b-val">${getGoalLabel(contentGoal)}</span>
         </div>
       </div>
-
+      <div class="meet-card">
+        <div class="meet-eyebrow">Your Meeting Link</div>
+        <p class="meet-text">Click the button below at your scheduled time to join the call.</p>
+        <a href="${MEET_LINK}" target="_blank" class="meet-btn" style="display: inline-block; background: #0071e3; color: #ffffff; text-decoration: none; font-weight: 600; font-size: 15px; padding: 13px 28px; border-radius: 980px; text-align: center;">Join Google Meet</a>
+        <div class="meet-url">${MEET_LINK.replace('https://', '')}</div>
+      </div>
       <div class="agenda-title">What We'll Cover on the Call</div>
       <div class="agenda-item">
         <div class="agenda-num">1</div>
@@ -241,7 +257,7 @@ export async function handleBooking(payload) {
     console.warn('\n[Resend Notice] No RESEND_API_KEY found in .env. Mocking email delivery.');
     console.log(`[Mock Admin Email] To: ${ownerEmail} | Subject: New Strategy Call: ${userName} (${dateStr} @ ${selectedTimeSlot})`);
     console.log(`[Mock Client Email] To: ${userEmail} | Subject: Confirmed: Strategy Session with Chizzy (${dateStr} @ ${selectedTimeSlot})\n`);
-    
+
     return {
       success: true,
       mock: true,

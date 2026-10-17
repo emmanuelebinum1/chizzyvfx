@@ -3896,4 +3896,116 @@
       width: 100%;
     }
   }
+    /* ===== Mobile-responsive modals ===== */
+  @media (max-width: 650px) {
+    .modal-backdrop {
+      padding: 10px;
+    }
+
+    /* Close button: sits above content so it never overlaps the step bar or title */
+    .modal-close-btn {
+      top: 12px;
+      right: 12px;
+    }
+
+    /* Video / Instagram preview modal */
+    .modal-dialog.showcase-modal {
+      padding: 56px 16px 18px;
+      max-height: calc(100dvh - 20px);
+      border-radius: var(--radius-xl);
+    }
+    .modal-header h3 {
+      font-size: 1.1rem;
+      margin: 4px 0 12px;
+      padding-right: 0;
+    }
+    .modal-footer-custom {
+      flex-direction: column-reverse;
+      align-items: stretch;
+    }
+    .modal-ext-btn,
+    .modal-cta-btn {
+      width: 100%;
+      justify-content: center;
+    }
+
+    /* Booking modal */
+    .booking-dialog {
+      padding: 56px 16px 20px;
+      max-height: calc(100dvh - 20px);
+      border-radius: var(--radius-xl);
+    }
+    .booking-header {
+      margin-bottom: 18px;
+      padding-bottom: 16px;
+    }
+    .booking-title {
+      font-size: 1.25rem;
+    }
+    .option-card {
+      padding: 11px 12px;
+      gap: 10px;
+    }
+    .opt-badge {
+      font-size: 0.6rem;
+      padding: 2px 7px;
+    }
+    .times-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+    }
+    .time-pill {
+      padding: 9px 4px;
+      font-size: 0.8rem;
+    }
+    .apple-input {
+      font-size: 16px; /* stops iOS from zooming in on focus */
+    }
+    .modal-actions {
+      justify-content: stretch;
+    }
+    .next-btn {
+      width: 100%;
+      justify-content: center;
+    }
+    .modal-actions-split {
+      flex-direction: column-reverse;
+      align-items: stretch;
+    }
+    .back-btn,
+    .confirm-btn {
+      width: 100%;
+      justify-content: center;
+    }
+
+    /* Confirmation screen */
+    .booking-summary-card {
+      padding: 18px 16px;
+    }
+    .summary-row {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 4px;
+    }
+    .summary-email {
+      word-break: break-all;
+    }
+    .meet-pill {
+      border-radius: var(--radius-lg);
+      text-align: center;
+    }
+    .done-btn {
+      width: 100%;
+    }
+  }
+
+  @media (max-width: 420px) {
+    /* Show only the active step's label so the 3 steps fit */
+    .step-segment:not(.active) .step-text {
+      display: none;
+    }
+    .dates-scroll-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
 </style>

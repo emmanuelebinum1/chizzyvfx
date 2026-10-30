@@ -37,67 +37,102 @@
   const videoProjects = [
     {
       id: 1,
-      category: 'saas',
-      youtubeId: '',
-      label: 'SaaS',
-      title: 'Project Title #1',
-      summary: 'A dynamic montage showcasing storytelling, pacing, and motion design chops.'
+      category: 'shortform',
+      driveId: '12M0Geragz_zyjyR705OApi_1V4o8l-iB',
+      url: 'https://drive.google.com/file/d/12M0Geragz_zyjyR705OApi_1V4o8l-iB/view',
+      label: 'Short-form Reels',
+      title: 'Hook & Retention Reel',
+      summary: 'Fast-paced short-form creative engineered for high retention and viewer engagement.'
     },
     {
       id: 2,
       category: 'shortform',
-      youtubeId: '',
+      driveId: '1i1qqb6ZoZpEk5nkoIs33bea3Bm-DLu5k',
+      url: 'https://drive.google.com/file/d/1i1qqb6ZoZpEk5nkoIs33bea3Bm-DLu5k/view',
       label: 'Short-form Reels',
-      title: 'Project Title #2',
-      summary: 'Short-form motion edit tailored for high retention on Instagram and TikTok.'
+      title: 'Dynamic Social Edit',
+      summary: 'Scroll-stopping visual pacing with kinetic text animation and seamless sound design.'
     },
     {
       id: 3,
       category: 'shortform',
-      youtubeId: '',
+      driveId: '10rbWvbVj8Ll1lVF90GHvoLIAjqkyg4Yv',
+      url: 'https://drive.google.com/file/d/10rbWvbVj8Ll1lVF90GHvoLIAjqkyg4Yv/view',
       label: 'Short-form Reels',
-      title: 'Project Title #3',
-      summary: 'Short-form content and seamless transition work designed for the scroll-stopping hook.'
+      title: 'Viral Short-form Concept',
+      summary: 'Punchy transitions and rhythmic cuts optimized for Instagram Reels and TikTok.'
     },
     {
       id: 4,
-      category: 'saas',
-      youtubeId: '',
-      label: 'SaaS',
-      title: 'Project Title #4',
-      summary: 'A sleek SaaS product walkthrough highlighting product UI with crisp pacing.'
+      category: 'longform',
+      driveId: '1tVQcEh4yvOk-3b-phHFt2lj4jrHg_uEC',
+      url: 'https://drive.google.com/file/d/1tVQcEh4yvOk-3b-phHFt2lj4jrHg_uEC/view',
+      label: 'Long-form Videos',
+      title: 'Top 3 VPS for Bot Trading',
+      summary: 'Full structured breakdown detailing trading bot infrastructure with clear visual overlays.'
     },
     {
       id: 5,
       category: 'other',
-      youtubeId: '',
+      driveId: '1SitdphOcuoYCNINLrWZlkAQP2ISZEMju',
+      url: 'https://drive.google.com/file/d/1SitdphOcuoYCNINLrWZlkAQP2ISZEMju/view',
       label: 'Others',
-      title: 'Project Title #5',
-      summary: 'Engaging commercial video edit with polished color grading and sound design.'
+      title: 'Perfect Motion Showcase',
+      summary: 'High-end motion design, fluid graphics, and kinetic typography showcase.'
     },
     {
       id: 6,
-      category: 'shortform',
-      youtubeId: '',
-      label: 'Short-form Reels',
-      title: 'Project Title #6',
-      summary: 'Fast-paced short-form creative crafted for audience engagement.'
+      category: 'saas',
+      driveId: '1c7eWaEmwBKCPHt-25BSwIMeIgVHvmkZP',
+      url: 'https://drive.google.com/file/d/1c7eWaEmwBKCPHt-25BSwIMeIgVHvmkZP/view',
+      label: 'SaaS',
+      title: 'High-Converting Onboarding VSL',
+      summary: 'Persuasive product onboarding video sales letter built to maximize conversion and clarity.'
     },
     {
       id: 7,
-      category: 'shortform',
-      youtubeId: '',
-      label: 'Short-form Reels',
-      title: 'Project Title #7',
-      summary: 'High-energy short-form edit engineered for social virality.'
+      category: 'other',
+      driveId: '1NQK4x6I0pmN1q_fzRJGzXMWXfXvU9ZY_',
+      url: 'https://drive.google.com/file/d/1NQK4x6I0pmN1q_fzRJGzXMWXfXvU9ZY_/view',
+      label: 'Others',
+      title: 'Learnable Full Composition',
+      summary: 'Comprehensive motion sequence blending 3D assets, UI elements, and branded motion.'
     },
     {
       id: 8,
+      category: 'saas',
+      youtubeId: '9fBqXX94hxY',
+      url: 'https://www.youtube.com/watch?v=9fBqXX94hxY',
+      label: 'SaaS',
+      title: 'ShopBot Product Demo',
+      summary: 'Sleek product walkthrough demonstrating software features with crisp timing and branded graphics.'
+    },
+    {
+      id: 9,
       category: 'longform',
-      youtubeId: '',
+      youtubeId: 'iOw7PYt4OD8',
+      url: 'https://youtube.com/@cashpracticesolution?si=TrferiFxA1oF7wkl',
       label: 'Long-form Videos',
-      title: 'Project Title #8',
-      summary: 'Full narrative long-form YouTube edit with compelling structure and storytelling.'
+      title: 'Cash Practice Solution — AI in Healthcare',
+      summary: 'Comprehensive video essay and breakdown detailing AI systems and modern practice workflows.'
+    },
+    {
+      id: 10,
+      category: 'shortform',
+      instagramId: 'Dew8nbkNXY7',
+      url: 'https://www.instagram.com/reel/Dew8nbkNXY7/?xtok=MXBnMzl1dXRkeWpwdw==',
+      label: 'Short-form Reels',
+      title: 'High-Retention Instagram Reel #1',
+      summary: 'Short-form viral reel featuring dynamic zooms, seamless typography, and sound design.'
+    },
+    {
+      id: 11,
+      category: 'shortform',
+      instagramId: 'DeglmgPN3OH',
+      url: 'https://www.instagram.com/reel/DeglmgPN3OH/?cplk=MThrbHZ6M212enY5Mw==',
+      label: 'Short-form Reels',
+      title: 'High-Retention Instagram Reel #2',
+      summary: 'Scroll-stopping Instagram reel edit engineered for high hook rate and audience watch time.'
     }
   ];
 
@@ -124,15 +159,6 @@
         <ul class="nav-links">
           <li><a href="#video-editing">Video</a></li>
           <li><a href="#about">About</a></li>
-          <li>
-            <a 
-              href="/content-strategist" 
-              class="nav-cs-link"
-              on:click={(e) => handleNavigate(e, '/content-strategist')}
-            >
-              Content Strategist →
-            </a>
-          </li>
         </ul>
 
         <div class="nav-actions">
@@ -166,12 +192,12 @@
           </button>
 
           <a 
-            href="https://x.com" 
+            href="https://www.instagram.com/chizzyvfx/" 
             target="_blank" 
             rel="noopener noreferrer" 
             class="btn btn-secondary nav-cta"
           >
-            Follow on X
+            Follow on IG
           </a>
         </div>
       </div>
@@ -202,15 +228,17 @@
         </a>
 
         <a 
-          href="/content-strategist" 
+          href="https://www.instagram.com/chizzyvfx/" 
+          target="_blank" 
+          rel="noopener noreferrer" 
           class="btn btn-secondary hero-btn"
-          on:click={(e) => handleNavigate(e, '/content-strategist')}
         >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <polygon points="23 7 16 12 23 17 23 7"></polygon>
-            <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
           </svg>
-          <span>Content Strategist Agency</span>
+          <span>Follow on IG</span>
         </a>
       </div>
     </section>
@@ -265,11 +293,27 @@
         {#each filteredVideos as video (video.id)}
           <div class="video-card apple-card">
             <div class="video-wrap">
-              {#if video.youtubeId}
+              {#if video.driveId}
+                <iframe 
+                  src="https://drive.google.com/file/d/{video.driveId}/preview" 
+                  title={video.title}
+                  allow="autoplay; fullscreen" 
+                  allowfullscreen
+                  loading="lazy"
+                ></iframe>
+              {:else if video.youtubeId}
                 <iframe 
                   src="https://www.youtube-nocookie.com/embed/{video.youtubeId}?rel=0&modestbranding=1" 
                   title={video.title}
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                  allowfullscreen
+                  loading="lazy"
+                ></iframe>
+              {:else if video.instagramId}
+                <iframe 
+                  src="https://www.instagram.com/reel/{video.instagramId}/embed" 
+                  title={video.title}
+                  allowtransparency="true"
                   allowfullscreen
                   loading="lazy"
                 ></iframe>
@@ -285,7 +329,25 @@
               {/if}
             </div>
             <div class="video-info">
-              <span class="video-label">{video.label}</span>
+              <div class="video-info-top">
+                <span class="video-label">{video.label}</span>
+                {#if video.url}
+                  <a 
+                    href={video.url} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    class="video-ext-link"
+                    title={video.driveId ? 'Open on Google Drive' : video.instagramId ? 'Open on Instagram' : 'Open on YouTube'}
+                    aria-label={`Open ${video.title}`}
+                  >
+                    <span>{video.driveId ? 'Drive' : video.instagramId ? 'Instagram' : 'YouTube'}</span>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="7" y1="17" x2="17" y2="7"></line>
+                      <polyline points="7 7 17 7 17 17"></polyline>
+                    </svg>
+                  </a>
+                {/if}
+              </div>
               <h3 class="video-title">{video.title}</h3>
               <p class="video-summary">{video.summary}</p>
             </div>
@@ -410,10 +472,6 @@
     color: var(--text-primary);
   }
 
-  .nav-cs-link {
-    color: var(--accent-blue) !important;
-    font-weight: 600 !important;
-  }
 
   .nav-actions {
     display: flex;
@@ -728,6 +786,13 @@
     position: relative;
   }
 
+  .video-info-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.7rem;
+  }
+
   .video-label {
     display: inline-flex;
     align-items: center;
@@ -741,7 +806,25 @@
     color: var(--accent-blue);
     letter-spacing: 0.06em;
     text-transform: uppercase;
-    margin-bottom: 0.7rem;
+    margin-bottom: 0;
+  }
+
+  .video-ext-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color var(--duration-fast) var(--ease-apple), transform var(--duration-fast) var(--ease-apple);
+    padding: 2px 6px;
+    border-radius: var(--radius-sm);
+  }
+
+  .video-ext-link:hover {
+    color: var(--accent-blue);
+    transform: translateX(1px);
   }
 
   .video-title {

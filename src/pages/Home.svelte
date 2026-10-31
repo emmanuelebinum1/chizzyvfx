@@ -37,19 +37,19 @@
   const videoProjects = [
     {
       id: 1,
-      category: 'shortform',
+      category: 'saas',
       driveId: '12M0Geragz_zyjyR705OApi_1V4o8l-iB',
       url: 'https://drive.google.com/file/d/12M0Geragz_zyjyR705OApi_1V4o8l-iB/view',
-      label: 'Short-form Reels',
+      label: 'SaaS',
       title: 'Hook & Retention Reel',
       summary: 'Fast-paced short-form creative engineered for high retention and viewer engagement.'
     },
     {
       id: 2,
-      category: 'shortform',
+      category: 'saas',
       driveId: '1i1qqb6ZoZpEk5nkoIs33bea3Bm-DLu5k',
       url: 'https://drive.google.com/file/d/1i1qqb6ZoZpEk5nkoIs33bea3Bm-DLu5k/view',
-      label: 'Short-form Reels',
+      label: 'SaaS',
       title: 'Dynamic Social Edit',
       summary: 'Scroll-stopping visual pacing with kinetic text animation and seamless sound design.'
     },
@@ -73,10 +73,10 @@
     },
     {
       id: 5,
-      category: 'other',
+      category: 'saas',
       driveId: '1SitdphOcuoYCNINLrWZlkAQP2ISZEMju',
       url: 'https://drive.google.com/file/d/1SitdphOcuoYCNINLrWZlkAQP2ISZEMju/view',
-      label: 'Others',
+      label: 'SaaS',
       title: 'Perfect Motion Showcase',
       summary: 'High-end motion design, fluid graphics, and kinetic typography showcase.'
     },
@@ -91,10 +91,10 @@
     },
     {
       id: 7,
-      category: 'other',
+      category: 'saas',
       driveId: '1NQK4x6I0pmN1q_fzRJGzXMWXfXvU9ZY_',
       url: 'https://drive.google.com/file/d/1NQK4x6I0pmN1q_fzRJGzXMWXfXvU9ZY_/view',
-      label: 'Others',
+      label: 'SaaS',
       title: 'Learnable Full Composition',
       summary: 'Comprehensive motion sequence blending 3D assets, UI elements, and branded motion.'
     },

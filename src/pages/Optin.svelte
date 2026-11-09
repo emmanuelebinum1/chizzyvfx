@@ -1,5 +1,7 @@
 <script>
   import '../app.css';
+  import { onMount } from 'svelte';
+  import { trackPageView, trackLead } from '../lib/metaPixel.js';
 
   export let onNavigate = null;
 
@@ -28,6 +30,10 @@
       onNavigate(path, e);
     }
   }
+
+  onMount(() => {
+    trackPageView();
+  });
 
   async function handleSubmit(e) {
     if (e) e.preventDefault();
@@ -67,6 +73,9 @@
         sessionStorage.setItem('blueprint_lead_name', name.trim());
         sessionStorage.setItem('blueprint_lead_email', email.trim());
       }
+
+      // Report the conversion to Meta before navigating away from the opt-in page
+      trackLead({ name: name.trim(), email: email.trim(), phone: phone.trim() });
 
       // Immediately navigate to the training page
       handleNavigate('/training');

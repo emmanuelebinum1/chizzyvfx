@@ -1,6 +1,7 @@
 <script>
   import '../app.css';
   import { onMount } from 'svelte';
+  import { trackPageView, trackViewContent } from '../lib/metaPixel.js';
 
   export let onNavigate = null;
 
@@ -45,6 +46,9 @@
   }
 
   onMount(() => {
+    trackPageView();
+    trackViewContent();
+
     if (typeof window !== 'undefined') {
       const stored = sessionStorage.getItem('blueprint_lead_name');
       if (stored) leadName = stored;

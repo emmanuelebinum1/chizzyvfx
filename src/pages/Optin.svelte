@@ -675,8 +675,29 @@
   }
 
   @media (max-width: 640px) {
+    .nav-container {
+      padding: 10px 16px;
+    }
+    .brand {
+      font-size: 1.15rem;
+    }
+    .optin-main {
+      padding: 24px 14px 48px;
+    }
+    .optin-headline {
+      font-size: 1.45rem;
+      line-height: 1.25;
+      margin-bottom: 14px;
+    }
+    .optin-subhead {
+      font-size: 0.94rem;
+      line-height: 1.5;
+      margin-bottom: 24px;
+    }
     .optin-card {
-      padding: 28px 20px;
+      padding: 24px 16px;
+      border-radius: var(--radius-xl);
+      margin-bottom: 30px;
     }
     .trust-row {
       flex-direction: column;
@@ -684,8 +705,21 @@
       gap: 10px;
     }
     .perk-card {
-      padding: 18px;
+      padding: 16px;
       gap: 14px;
+      border-radius: var(--radius-lg);
+    }
+  }
+
+  @media (max-width: 420px) {
+    .nav-container {
+      padding: 8px 12px;
+    }
+    .optin-main {
+      padding: 20px 10px 40px;
+    }
+    .optin-headline {
+      font-size: 1.32rem;
     }
   }
 </style>

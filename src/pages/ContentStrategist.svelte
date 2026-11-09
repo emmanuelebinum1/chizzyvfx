@@ -1,5 +1,6 @@
 <script>
   import '../app.css';
+  import { onMount } from 'svelte';
 
   export let onNavigate = null;
 
@@ -8,6 +9,59 @@
       onNavigate(path, e);
     }
   }
+
+  // Floating Mini-Player — uses a stable anchor to prevent scroll flicker
+  let csVideoAnchor = null;     // stable layout sentinel, never repositioned
+  let isCsFloating = false;
+  let isCsVideoDismissed = false;
+  let hasInteractedWithCsVideo = false;
+
+  function handleDismissCsFloating() {
+    isCsVideoDismissed = true;
+    isCsFloating = false;
+  }
+
+  function scrollToCsPlayer() {
+    if (csVideoAnchor) {
+      csVideoAnchor.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }
+
+  onMount(() => {
+    if (typeof window !== 'undefined') {
+      const onBlur = () => {
+        if (document.activeElement && document.activeElement.tagName === 'IFRAME') {
+          hasInteractedWithCsVideo = true;
+        }
+      };
+      window.addEventListener('blur', onBlur);
+
+      // Use rAF gate to avoid reflow-loop flicker — read from anchor (always in flow)
+      let rafPending = false;
+      const onScroll = () => {
+        if (isCsVideoDismissed || !csVideoAnchor || rafPending) return;
+        rafPending = true;
+        requestAnimationFrame(() => {
+          rafPending = false;
+          if (isCsVideoDismissed || !csVideoAnchor) return;
+          const rect = csVideoAnchor.getBoundingClientRect();
+          const shouldFloat = rect.bottom < 80;
+          if (shouldFloat && hasInteractedWithCsVideo && !isCsFloating) {
+            isCsFloating = true;
+          } else if (!shouldFloat && isCsFloating) {
+            isCsFloating = false;
+          }
+        });
+      };
+
+      window.addEventListener('scroll', onScroll, { passive: true });
+
+      return () => {
+        window.removeEventListener('blur', onBlur);
+        window.removeEventListener('scroll', onScroll);
+      };
+    }
+  });
 
   // Theme Management (Light / Dark)
   let isDarkMode = false;
@@ -278,14 +332,6 @@
       </a>
 
       <div class="nav-links">
-        <a 
-          href="/" 
-          class="nav-item nav-portfolio-pill" 
-          on:click={(e) => handleLinkClick(e, '/')}
-          aria-label="Back to Personal Portfolio"
-        >
-          
-        </a>
         <a href="#services" class="nav-item">Services</a>
         <a href="#process" class="nav-item">Process</a>
         <a href="#pricing" class="nav-item">Pricing</a>
@@ -336,9 +382,9 @@
           href="/" 
           class="portfolio-back-pill" 
           on:click={(e) => handleLinkClick(e, '/')}
+          aria-label="Back to Personal Portfolio"
         >
-        
-        
+          <span>&larr; Portfolio</span>
         </a>
         <div class="status-pill">
           <span class="status-dot"></span>
@@ -373,23 +419,55 @@
   <!-- Video Showcase Section -->
 <section class="video-section" id="video">
   <div class="section-container">
-    <div class="video-card apple-card">
-      <div class="video-card-header">
-        <div class="video-meta">
-          <span class="badge-pill">Overview</span>
-          <span class="video-author">A message from Chizzy — 2 min</span>
+    <!-- Anchor: always in layout flow, tracks position for scroll detection -->
+    <div class="cs-video-slot-anchor" bind:this={csVideoAnchor}>
+      <!-- Inner card: this one gets repositioned to fixed corner when floating -->
+      <div 
+        class="video-card apple-card"
+        class:floating-docked={isCsFloating && !isCsVideoDismissed}
+      >
+        <div class="video-card-header">
+          <div class="video-meta">
+            <span class="badge-pill">Overview</span>
+            <span class="video-author">A message from Chizzy — 2 min</span>
+          </div>
+          {#if isCsFloating && !isCsVideoDismissed}
+            <div class="dock-actions">
+              <button 
+                type="button" 
+                class="dock-scroll-btn"
+                on:click={scrollToCsPlayer}
+                title="Scroll back to section"
+              >
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="15 3 21 3 21 9"></polyline>
+                  <polyline points="9 21 3 21 3 15"></polyline>
+                  <line x1="21" y1="3" x2="14" y2="10"></line>
+                  <line x1="3" y1="21" x2="10" y2="14"></line>
+                </svg>
+              </button>
+              <button 
+                type="button" 
+                class="dock-dismiss-btn"
+                on:click={handleDismissCsFloating}
+                aria-label="Dismiss floating video"
+              >
+                &times;
+              </button>
+            </div>
+          {/if}
         </div>
-      </div>
 
-      <div class="video-frame-container">
-        <iframe
-          src="https://www.youtube-nocookie.com/embed/9TD0GZrjj0w?rel=0&modestbranding=1"
-          title="A message from Chizzy"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          referrerpolicy="strict-origin-when-cross-origin"
-          allowfullscreen
-          loading="lazy"
-        ></iframe>
+        <div class="video-frame-container">
+          <iframe
+            src="https://www.youtube-nocookie.com/embed/9TD0GZrjj0w?rel=0&modestbranding=1"
+            title="A message from Chizzy"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allowfullscreen
+            loading="lazy"
+          ></iframe>
+        </div>
       </div>
     </div>
   </div>
@@ -1839,25 +1917,87 @@
     padding: 20px 0 60px;
   }
 
+  /* Anchor: always in flow, holds space to prevent page-jump */
+  .cs-video-slot-anchor {
+    width: 100%;
+    position: relative;
+  }
+
   .video-card {
     padding: 24px;
     border-radius: var(--radius-xl);
     overflow: hidden;
+    /* Transition only visual properties, never position/size to avoid flicker */
+    transition: border-radius 300ms var(--ease-apple), box-shadow 300ms var(--ease-apple);
+  }
+
+  /* Seamless continuous floating dock — lifts out of anchor, anchor keeps space */
+  .video-card.floating-docked {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 320px;
+    padding: 10px;
+    z-index: 10000;
+    border-radius: var(--radius-lg);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+    border: 1px solid var(--glass-border);
+    background: var(--nav-bg);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    animation: popIn 280ms var(--ease-apple) forwards;
   }
 
   .video-card-header {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 16px;
     margin-bottom: 20px;
     padding-bottom: 16px;
     border-bottom: 1px solid var(--border-subtle);
   }
 
+  .floating-docked .video-card-header {
+    margin-bottom: 8px;
+    padding-bottom: 6px;
+  }
+
   .video-meta {
     display: flex;
     align-items: center;
     gap: 12px;
+  }
+
+  .dock-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .dock-scroll-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-primary);
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    padding: 2px;
+  }
+
+  .dock-dismiss-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 1.25rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0 4px;
+    transition: color var(--duration-fast) var(--ease-apple);
+  }
+
+  .dock-dismiss-btn:hover {
+    color: var(--text-primary);
   }
 
   .badge-pill {
@@ -1877,6 +2017,10 @@
     color: var(--text-primary);
   }
 
+  .floating-docked .video-author {
+    font-size: 0.78rem;
+  }
+
   .video-frame-container {
     position: relative;
     width: 100%;
@@ -1894,6 +2038,17 @@
     width: 100%;
     height: 100%;
     border: none;
+  }
+
+  @keyframes popIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px) scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
   }
 
   /* Section Header */
@@ -3977,15 +4132,37 @@
   }
 
   @media (max-width: 600px) {
+    .nav-container {
+      padding: 10px 16px;
+    }
+    .brand {
+      font-size: 1.15rem;
+    }
+    .nav-cta {
+      padding: 0.45rem 0.95rem;
+      font-size: 0.82rem;
+    }
+    .hero-section {
+      padding: 60px 16px 40px;
+    }
+    .hero-container h1 {
+      font-size: 1.85rem;
+      line-height: 1.2;
+    }
+    .hero-sub {
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
     .video-card {
-      padding: 14px;
+      padding: 12px;
+      border-radius: var(--radius-xl);
     }
     .video-card-header {
-      margin-bottom: 12px;
-      padding-bottom: 12px;
+      margin-bottom: 10px;
+      padding-bottom: 10px;
     }
     .video-author {
-      font-size: 0.825rem;
+      font-size: 0.8rem;
     }
     .input-wrapper {
       flex-direction: column;
@@ -3995,6 +4172,14 @@
     }
     .form-btn {
       width: 100%;
+    }
+    .video-card.floating-docked {
+      bottom: 16px;
+      right: 14px;
+      left: 14px;
+      width: auto;
+      max-width: 320px;
+      margin-left: auto;
     }
   }
     /* ===== Mobile-responsive modals ===== */

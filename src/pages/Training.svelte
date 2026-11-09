@@ -26,16 +26,68 @@
     }
   }
 
+  // Floating Mini-Player State
+  // We use a separate sentinel anchor to avoid reflow-triggered flicker.
+  let videoAnchor = null;       // stable layout sentinel div — never repositioned
+  let isFloating = false;
+  let isVideoDismissed = false;
+  let hasInteractedWithVideo = false;
+
+  function handleDismissFloating() {
+    isVideoDismissed = true;
+    isFloating = false;
+  }
+
+  function scrollToMainPlayer() {
+    if (videoAnchor) {
+      videoAnchor.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }
+
   onMount(() => {
     if (typeof window !== 'undefined') {
       const stored = sessionStorage.getItem('blueprint_lead_name');
-      if (stored) {
-        leadName = stored;
-      }
+      if (stored) leadName = stored;
+
+      // Detect when user clicks inside the iframe (indicating they started the video)
+      const onBlur = () => {
+        if (document.activeElement && document.activeElement.tagName === 'IFRAME') {
+          hasInteractedWithVideo = true;
+        }
+      };
+      window.addEventListener('blur', onBlur);
+
+      // Use requestAnimationFrame to avoid reflow cycles causing flicker.
+      // We read from the ANCHOR div (which is always in layout flow, never repositioned)
+      // so its bounding rect is stable and doesn't react to the floating state change.
+      let rafPending = false;
+      const onScroll = () => {
+        if (isVideoDismissed || !videoAnchor || rafPending) return;
+        rafPending = true;
+        requestAnimationFrame(() => {
+          rafPending = false;
+          if (isVideoDismissed || !videoAnchor) return;
+          const rect = videoAnchor.getBoundingClientRect();
+          // Anchor is always in flow. If its bottom goes above the viewport top → float.
+          const shouldFloat = rect.bottom < 80;
+          if (shouldFloat && hasInteractedWithVideo && !isFloating) {
+            isFloating = true;
+          } else if (!shouldFloat && isFloating) {
+            isFloating = false;
+          }
+        });
+      };
+
+      window.addEventListener('scroll', onScroll, { passive: true });
+
+      return () => {
+        window.removeEventListener('blur', onBlur);
+        window.removeEventListener('scroll', onScroll);
+      };
     }
   });
 
-  // Resource download link (pointing to Google Drive folder or customizable link)
+  // Resource download link
   const resourceDownloadUrl = 'https://drive.google.com/drive/folders/1yujvmx9yq9DgNXFOsoWGLBriL76W5It9';
 </script>
 
@@ -85,7 +137,8 @@
           class="btn btn-secondary nav-cs-btn"
           on:click={(e) => handleNavigate('/content-strategist', e)}
         >
-          Content Strategist Agency &rarr;
+          <span class="cs-btn-full">Content Strategist Agency &rarr;</span>
+          <span class="cs-btn-short">Agency &rarr;</span>
         </a>
       </div>
     </div>
@@ -116,17 +169,52 @@
         Watch the full masterclass below. Follow along with the exact blueprint, distribution frameworks, and system automations used to generate over 300 assets every single month.
       </p>
 
-      <!-- 1-Hour YouTube Video Embed Player Container -->
-      <div class="video-masterpiece-wrapper apple-card">
-        <div class="video-responsive-frame">
-          <!-- Training Masterclass Video -->
-          <iframe 
-            src="https://www.youtube-nocookie.com/embed/isuHsteB32Y?rel=0&modestbranding=1" 
-            title="My Content Blueprint: How I create and post 300 pieces of content per month"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-            allowfullscreen
-            loading="lazy"
-          ></iframe>
+      <!-- Video: anchor div stays in layout flow (never repositioned), wrapper floats independently -->
+      <div 
+        class="video-slot-anchor"
+        bind:this={videoAnchor}
+      >
+        <!-- The inner wrapper is what gets fixed-positioned when floating -->
+        <div 
+          class="video-masterpiece-wrapper apple-card"
+          class:floating-docked={isFloating && !isVideoDismissed}
+        >
+          {#if isFloating && !isVideoDismissed}
+            <div class="floating-dock-header">
+              <button 
+                type="button" 
+                class="dock-scroll-btn"
+                on:click={scrollToMainPlayer}
+                title="Scroll to main video"
+              >
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="15 3 21 3 21 9"></polyline>
+                  <polyline points="9 21 3 21 3 15"></polyline>
+                  <line x1="21" y1="3" x2="14" y2="10"></line>
+                  <line x1="3" y1="21" x2="10" y2="14"></line>
+                </svg>
+                <span>Now Playing</span>
+              </button>
+              <button 
+                type="button" 
+                class="dock-dismiss-btn"
+                on:click={handleDismissFloating}
+                aria-label="Dismiss floating video"
+              >
+                &times;
+              </button>
+            </div>
+          {/if}
+
+          <div class="video-responsive-frame">
+            <iframe 
+              src="https://www.youtube-nocookie.com/embed/isuHsteB32Y?rel=0&modestbranding=1" 
+              title="My Content Blueprint: How I create and post 300 pieces of content per month"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+              allowfullscreen
+              loading="lazy"
+            ></iframe>
+          </div>
         </div>
       </div>
 
@@ -223,6 +311,8 @@
       <p>&copy; 2026 ChizzyVFX &bull; All rights reserved.</p>
     </div>
   </footer>
+
+  <!-- Floating Picture-in-Picture Mini Video Player Dock -->
 </div>
 
 <style>
@@ -248,10 +338,11 @@
   .nav-container {
     max-width: 1120px;
     margin: 0 auto;
-    padding: 14px 24px;
+    padding: 12px 20px;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 12px;
   }
 
   .brand {
@@ -260,6 +351,7 @@
     font-size: 1.25rem;
     letter-spacing: -0.02em;
     color: var(--text-primary);
+    white-space: nowrap;
   }
 
   .brand-accent {
@@ -269,13 +361,23 @@
   .nav-actions {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 10px;
   }
 
   .nav-cs-btn {
-    padding: 0.55rem 1.2rem;
-    font-size: 0.85rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.84rem;
     font-weight: 600;
+    white-space: nowrap;
+    border-radius: var(--radius-pill);
+  }
+
+  .cs-btn-short {
+    display: none;
+  }
+
+  .cs-btn-full {
+    display: inline;
   }
 
   .theme-toggle {
@@ -289,6 +391,7 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    flex-shrink: 0;
     transition: all var(--duration-fast) var(--ease-apple);
   }
 
@@ -300,11 +403,13 @@
   /* Main Stage */
   .training-main {
     flex: 1;
-    padding: 60px 24px 80px;
+    padding: 40px 16px 64px;
+    width: 100%;
   }
 
   .training-container {
     max-width: 980px;
+    width: 100%;
     margin: 0 auto;
     text-align: center;
     display: flex;
@@ -317,12 +422,13 @@
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    padding: 6px 18px;
+    padding: 6px 16px;
     border-radius: var(--radius-pill);
     background: var(--bg-secondary);
     border: 1px solid var(--border-color);
-    margin-bottom: 24px;
+    margin-bottom: 20px;
     box-shadow: var(--shadow-sm);
+    max-width: 100%;
   }
 
   .badge-dot {
@@ -331,45 +437,116 @@
     border-radius: 50%;
     background-color: var(--accent-green);
     box-shadow: 0 0 10px rgba(52, 199, 89, 0.6);
+    flex-shrink: 0;
   }
 
   .badge-text {
-    font-size: 0.8125rem;
+    font-size: 0.78rem;
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.05em;
     color: var(--text-secondary);
+    white-space: normal;
+    line-height: 1.4;
   }
 
   /* Headline */
   .training-headline {
-    font-size: clamp(2rem, 4.2vw, 3.2rem);
+    font-size: clamp(1.6rem, 5.5vw, 3rem);
     font-weight: 800;
-    line-height: 1.15;
-    letter-spacing: -0.035em;
+    line-height: 1.2;
+    letter-spacing: -0.03em;
     color: var(--text-primary);
-    margin-bottom: 20px;
-    max-width: 860px;
+    margin-bottom: 16px;
+    max-width: 880px;
+    word-break: normal;
+    overflow-wrap: break-word;
   }
 
   .training-subhead {
-    font-size: 1.12rem;
+    font-size: clamp(0.95rem, 2.5vw, 1.12rem);
     color: var(--text-secondary);
-    line-height: 1.65;
+    line-height: 1.6;
     max-width: 720px;
-    margin: 0 auto 40px;
+    margin: 0 auto 30px;
+    padding: 0 8px;
   }
 
-  /* Video Frame */
-  .video-masterpiece-wrapper {
+  /* Video slot: anchor stays in layout always, holds space to prevent page-jump */
+  .video-slot-anchor {
     width: 100%;
     max-width: 920px;
+    aspect-ratio: 16 / 9;   /* mirrors the iframe ratio so layout doesn't jump */
+    margin-bottom: 32px;
+    position: relative;      /* wrapper is positioned relative to this */
+  }
+
+  /* Video Frame & Seamless Continuous Floating Dock */
+  .video-masterpiece-wrapper {
+    width: 100%;
     border-radius: var(--radius-2xl);
     overflow: hidden;
     box-shadow: var(--shadow-lg);
-    margin-bottom: 40px;
     background: #000;
     border: 1px solid var(--border-color);
+    /* Only transition shadow/radius, NOT position/size (causes flicker) */
+    transition: border-radius 300ms var(--ease-apple), box-shadow 300ms var(--ease-apple);
+  }
+
+  /* When docked: lifts out of flow into a fixed corner — no layout reflow */
+  .video-masterpiece-wrapper.floating-docked {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 340px;
+    z-index: 10000;
+    border-radius: var(--radius-lg);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+    border: 1px solid var(--glass-border);
+    background: var(--nav-bg);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    animation: popIn 280ms var(--ease-apple) forwards;
+    /* Crucially: anchor div above keeps layout space — no page jump */
+  }
+
+  .floating-dock-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 12px;
+    background: var(--nav-bg);
+    border-bottom: 1px solid var(--border-color);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+
+  .dock-scroll-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-primary);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.74rem;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  .dock-dismiss-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 1.25rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0 4px;
+    transition: color var(--duration-fast) var(--ease-apple);
+  }
+
+  .dock-dismiss-btn:hover {
+    color: var(--text-primary);
   }
 
   .video-responsive-frame {
@@ -385,44 +562,60 @@
     display: block;
   }
 
+  @keyframes popIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px) scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  .animate-pop-in {
+    animation: popIn 300ms var(--ease-apple) forwards;
+  }
+
   /* Dual CTA Section */
   .dual-cta-section {
     width: 100%;
     max-width: 920px;
-    padding: 38px 34px;
+    padding: 34px 28px;
     border-radius: var(--radius-2xl);
     box-shadow: var(--shadow-md);
-    margin-bottom: 50px;
+    margin-bottom: 40px;
     text-align: center;
   }
 
   .cta-header h3 {
-    font-size: 1.5rem;
+    font-size: clamp(1.2rem, 3.2vw, 1.5rem);
     font-weight: 700;
     letter-spacing: -0.02em;
     color: var(--text-primary);
-    margin-bottom: 6px;
+    margin-bottom: 8px;
   }
 
   .cta-header p {
-    font-size: 0.98rem;
+    font-size: 0.95rem;
     color: var(--text-secondary);
     max-width: 580px;
-    margin: 0 auto 28px;
+    margin: 0 auto 24px;
     line-height: 1.55;
   }
 
   .cta-buttons-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 18px;
+    gap: 16px;
+    width: 100%;
   }
 
   .cta-btn {
     display: flex;
     align-items: center;
-    gap: 16px;
-    padding: 18px 24px;
+    gap: 14px;
+    padding: 16px 20px;
     border-radius: var(--radius-xl);
     text-align: left;
     transition: all var(--duration-base) var(--ease-apple);
@@ -543,14 +736,145 @@
   }
 
   @media (max-width: 768px) {
+    .nav-container {
+      padding: 10px 16px;
+    }
+
+    .brand {
+      font-size: 1.12rem;
+    }
+
+    .cs-btn-full {
+      display: none;
+    }
+
+    .cs-btn-short {
+      display: inline;
+    }
+
+    .nav-cs-btn {
+      padding: 0.42rem 0.8rem;
+      font-size: 0.8rem;
+    }
+
+    .training-main {
+      padding: 24px 14px 48px;
+    }
+
+    .training-headline {
+      font-size: 1.45rem;
+      line-height: 1.25;
+      margin-bottom: 14px;
+      letter-spacing: -0.025em;
+    }
+
+    .training-subhead {
+      font-size: 0.92rem;
+      line-height: 1.5;
+      margin-bottom: 22px;
+      padding: 0 4px;
+    }
+
+    /* Video Player - Full edge-to-edge frame on mobile */
+    .video-masterpiece-wrapper {
+      border-radius: var(--radius-lg);
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-md);
+    }
+
+    .dual-cta-section {
+      padding: 24px 16px;
+      border-radius: var(--radius-xl);
+      margin-bottom: 30px;
+    }
+
+    .cta-header h3 {
+      font-size: 1.2rem;
+      line-height: 1.3;
+    }
+
+    .cta-header p {
+      font-size: 0.88rem;
+      margin-bottom: 18px;
+    }
+
     .cta-buttons-grid {
       grid-template-columns: 1fr;
+      gap: 12px;
     }
+
+    .cta-btn {
+      padding: 14px 16px;
+      gap: 12px;
+      border-radius: var(--radius-lg);
+    }
+
+    .btn-icon-wrap {
+      width: 38px;
+      height: 38px;
+    }
+
+    .btn-title {
+      font-size: 0.95rem;
+    }
+
+    .btn-sub {
+      font-size: 0.75rem;
+    }
+
     .video-summary-grid {
       grid-template-columns: 1fr;
+      gap: 14px;
     }
-    .dual-cta-section {
-      padding: 28px 20px;
+
+    .summary-card {
+      padding: 20px 16px;
+      border-radius: var(--radius-lg);
+    }
+
+    .summary-card h4 {
+      font-size: 0.98rem;
+    }
+
+    .summary-card p {
+      font-size: 0.84rem;
+    }
+
+    /* Floating Player on Mobile */
+    .video-masterpiece-wrapper.floating-docked {
+      bottom: 16px;
+      right: 14px;
+      left: 14px;
+      width: auto;
+      max-width: 320px;
+      margin-left: auto;
+    }
+  }
+
+  @media (max-width: 420px) {
+    .nav-container {
+      padding: 8px 12px;
+    }
+
+    .training-main {
+      padding: 20px 10px 40px;
+    }
+
+    .training-headline {
+      font-size: 1.32rem;
+      line-height: 1.25;
+    }
+
+    .video-masterpiece-wrapper {
+      border-radius: var(--radius-md);
+      margin-bottom: 20px;
+    }
+
+    .video-masterpiece-wrapper.floating-docked {
+      bottom: 12px;
+      right: 10px;
+      left: 10px;
+      max-width: 290px;
     }
   }
 </style>

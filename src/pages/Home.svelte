@@ -936,7 +936,15 @@
   /* RESPONSIVE */
   @media (max-width: 768px) {
     .container {
-      padding: 0 1.25rem;
+      padding: 0 1rem;
+    }
+
+    .nav-inner {
+      padding: 2px 0;
+    }
+
+    .nav-logo {
+      font-size: 1.15rem;
     }
 
     .nav-links {
@@ -944,20 +952,57 @@
     }
 
     .hero {
-      padding: 4.5rem 0 3.5rem;
+      padding: 3.5rem 0 2.5rem;
+    }
+
+    .hero h1 {
+      font-size: 2.1rem;
+      line-height: 1.18;
+    }
+
+    .hero-tagline {
+      font-size: 0.98rem;
+      line-height: 1.55;
+      margin-bottom: 2rem;
     }
 
     .stats-bar {
-      gap: 1.8rem;
-      padding: 1.75rem 1rem;
+      gap: 1.4rem;
+      padding: 1.4rem 0.8rem;
+      grid-template-columns: repeat(2, 1fr);
     }
 
     .about-card {
-      padding: 2rem 1.5rem;
+      padding: 1.8rem 1.25rem;
     }
 
     .video-filters {
       border-radius: 18px;
+      gap: 6px;
+      padding: 4px;
+    }
+
+    .filter-btn {
+      padding: 0.45rem 0.9rem;
+      font-size: 0.8rem;
+    }
+
+    .video-grid {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    .video-card {
+      border-radius: var(--radius-xl);
+    }
+  }
+
+  @media (max-width: 420px) {
+    .container {
+      padding: 0 0.75rem;
+    }
+    .hero h1 {
+      font-size: 1.85rem;
     }
   }
 </style>

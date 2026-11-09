@@ -405,7 +405,7 @@
     min-height: 100vh;
     color: var(--text-primary);
     line-height: 1.65;
-    overflow-x: hidden;
+    overflow-x: clip;
   }
 
   /* LAYOUT & CONTAINER */

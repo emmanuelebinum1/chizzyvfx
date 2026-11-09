@@ -3,19 +3,24 @@
   import { onMount } from 'svelte';
   import Home from './pages/Home.svelte';
   import ContentStrategist from './pages/ContentStrategist.svelte';
+  import Optin from './pages/Optin.svelte';
+  import Training from './pages/Training.svelte';
 
   function getRoute() {
     if (typeof window === 'undefined') return '/';
-    const path = window.location.pathname.toLowerCase();
-    const hash = window.location.hash.toLowerCase();
+    const path = window.location.pathname.toLowerCase().replace(/\/$/, '');
+    const hash = window.location.hash.toLowerCase().replace(/^#\/?/, '/').replace(/\/$/, '');
 
-    if (
-      path === '/content-strategist' ||
-      path === '/content-strategist/' ||
-      hash === '#/content-strategist' ||
-      hash === '#content-strategist'
-    ) {
+    const current = path || hash || '/';
+
+    if (current === '/content-strategist') {
       return '/content-strategist';
+    }
+    if (current === '/optin' || current === '/blueprint') {
+      return '/optin';
+    }
+    if (current === '/training' || current === '/masterclass') {
+      return '/training';
     }
     return '/';
   }
@@ -60,6 +65,10 @@
 
 {#if currentRoute === '/content-strategist'}
   <ContentStrategist onNavigate={navigate} />
+{:else if currentRoute === '/optin'}
+  <Optin onNavigate={navigate} />
+{:else if currentRoute === '/training'}
+  <Training onNavigate={navigate} />
 {:else}
   <Home onNavigate={navigate} />
 {/if}

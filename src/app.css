@@ -17,8 +17,10 @@
   --card-bg: rgba(255, 255, 255, 0.85);
   --card-hover-bg: rgba(255, 255, 255, 0.95);
   --card-backdrop: blur(24px) saturate(190%);
-  --glass-bg: rgba(255, 255, 255, 0.82);
-  --glass-border: rgba(255, 255, 255, 0.5);
+  --glass-bg: rgba(255, 255, 255, 0.72);
+  --glass-border: rgba(255, 255, 255, 0.4);
+  --nav-bg: rgba(255, 255, 255, 0.72);
+  --nav-border: rgba(0, 0, 0, 0.08);
 
   /* Background Wave Image (Light Mode) */
   --bg-image: url('/backgrounds/bg-blue-wave.jpg');
@@ -63,8 +65,10 @@
   --card-bg: rgba(28, 28, 30, 0.8);
   --card-hover-bg: rgba(36, 36, 38, 0.9);
   --card-backdrop: blur(24px) saturate(190%);
-  --glass-bg: rgba(22, 22, 23, 0.82);
-  --glass-border: rgba(255, 255, 255, 0.15);
+  --glass-bg: rgba(22, 22, 23, 0.72);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --nav-bg: rgba(18, 18, 20, 0.72);
+  --nav-border: rgba(255, 255, 255, 0.1);
 
   /* Background Wave Image (Dark Mode) */
   --bg-image: url('/backgrounds/bg-dark-wave.jpg');
@@ -216,6 +220,22 @@ p {
   backdrop-filter: blur(20px) saturate(180%);
   -webkit-backdrop-filter: blur(20px) saturate(180%);
   border: 1px solid var(--glass-border);
+}
+
+/* Apple Stationary Transparent Navbar (Universal across pages) */
+.navbar-stationary,
+nav.apple-glass,
+nav.navbar {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 1000 !important;
+  width: 100% !important;
+  background: var(--nav-bg) !important;
+  backdrop-filter: blur(20px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+  border-bottom: 1px solid var(--nav-border) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+  transition: background-color var(--duration-base) var(--ease-apple), border-color var(--duration-base) var(--ease-apple), box-shadow var(--duration-base) var(--ease-apple);
 }
 
 /* Gradient Text - Apple Signature Blue Gradient */

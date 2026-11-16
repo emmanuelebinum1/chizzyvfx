@@ -8,6 +8,7 @@
   let name = '';
   let email = '';
   let phone = '';
+  let contentExperience = '';
   let isSubmitting = false;
   let errorMessage = '';
 
@@ -58,7 +59,8 @@
         body: JSON.stringify({
           name: name.trim(),
           email: email.trim(),
-          phone: phone.trim()
+          phone: phone.trim(),
+          contentExperience
         })
       });
 
@@ -235,6 +237,38 @@
                 disabled={isSubmitting}
                 autocomplete="tel"
               />
+            </div>
+          </div>
+
+          <!-- Content Experience Question -->
+          <div class="form-group content-q-group">
+            <label class="content-q-label">What have you done with content in the last 30 days?</label>
+            <div class="radio-options">
+              <label class="radio-option" class:selected={contentExperience === 'nothing'}>
+                <input type="radio" name="content-exp" value="nothing" bind:group={contentExperience} disabled={isSubmitting} />
+                <span class="radio-dot"></span>
+                <span class="radio-text">Nothing yet</span>
+              </label>
+              <label class="radio-option" class:selected={contentExperience === 'no-system'}>
+                <input type="radio" name="content-exp" value="no-system" bind:group={contentExperience} disabled={isSubmitting} />
+                <span class="radio-dot"></span>
+                <span class="radio-text">Posted a few times. I don't have a system</span>
+              </label>
+              <label class="radio-option" class:selected={contentExperience === 'weekly'}>
+                <input type="radio" name="content-exp" value="weekly" bind:group={contentExperience} disabled={isSubmitting} />
+                <span class="radio-dot"></span>
+                <span class="radio-text">Posting weekly on my own</span>
+              </label>
+              <label class="radio-option" class:selected={contentExperience === 'outsourcing'}>
+                <input type="radio" name="content-exp" value="outsourcing" bind:group={contentExperience} disabled={isSubmitting} />
+                <span class="radio-dot"></span>
+                <span class="radio-text">Working with an editor or freelancer, but it's costly or messy</span>
+              </label>
+              <label class="radio-option" class:selected={contentExperience === 'scaling'}>
+                <input type="radio" name="content-exp" value="scaling" bind:group={contentExperience} disabled={isSubmitting} />
+                <span class="radio-dot"></span>
+                <span class="radio-text">Posted several times a week, I want to scale</span>
+              </label>
             </div>
           </div>
 
@@ -572,6 +606,95 @@
 
   .input-container input::placeholder {
     color: var(--text-tertiary);
+  }
+
+  /* Content Experience Question */
+  .content-q-group {
+    margin-top: 4px;
+  }
+
+  .content-q-label {
+    font-size: 0.84rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    letter-spacing: -0.01em;
+    margin-bottom: 4px;
+  }
+
+  .radio-options {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .radio-option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+    background: var(--bg-secondary);
+    cursor: pointer;
+    transition: all var(--duration-fast) var(--ease-apple);
+    user-select: none;
+  }
+
+  .radio-option:hover {
+    border-color: var(--text-tertiary);
+    background: var(--bg-primary);
+  }
+
+  .radio-option.selected {
+    border-color: var(--accent-blue);
+    background: rgba(0, 113, 227, 0.06);
+    box-shadow: 0 0 0 3px var(--accent-blue-glow);
+  }
+
+  .radio-option input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+  }
+
+  .radio-dot {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid var(--border-color);
+    flex-shrink: 0;
+    position: relative;
+    transition: all var(--duration-fast) var(--ease-apple);
+  }
+
+  .radio-option.selected .radio-dot {
+    border-color: var(--accent-blue);
+  }
+
+  .radio-option.selected .radio-dot::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--accent-blue);
+    transform: translate(-50%, -50%);
+  }
+
+  .radio-text {
+    font-size: 0.92rem;
+    color: var(--text-primary);
+    font-weight: 500;
+    line-height: 1.4;
+  }
+
+  .radio-option.selected .radio-text {
+    color: var(--text-primary);
+    font-weight: 600;
   }
 
   .optin-submit-btn {

@@ -234,9 +234,14 @@
   let userEmail = '';
   let userHandle = '';
 
-  // Calendar dates helper (14 upcoming business days)
+  // Calendar dates helper (14 upcoming business days from today)
   function getCalendarDays() {
-    const start = new Date(2026, 9, 6);
+    const today = new Date();
+    // Start from tomorrow (next available business day)
+    const start = new Date(today);
+    start.setDate(start.getDate() + 1);
+    start.setHours(0, 0, 0, 0);
+
     const days = [];
     let cur = new Date(start);
     while (days.length < 14) {
@@ -248,7 +253,22 @@
     return days;
   }
 
-  const calendarDays = getCalendarDays();
+  // Build a readable label for the month(s) covered by the calendar days
+  function getCalendarLabel(days) {
+    if (!days.length) return '';
+    const first = days[0];
+    const last = days[days.length - 1];
+    const fmtMonth = (d) => d.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+    if (first.getMonth() === last.getMonth() && first.getFullYear() === last.getFullYear()) {
+      return fmtMonth(first);
+    }
+    // Spans two months
+    const fmtShort = (d) => d.toLocaleDateString('en-US', { month: 'short' });
+    return `${fmtShort(first)} – ${fmtShort(last)} ${last.getFullYear()}`;
+  }
+
+  let calendarDays = getCalendarDays();
+  let calendarLabel = getCalendarLabel(calendarDays);
   let selectedDate = calendarDays[0];
   let selectedTimeSlot = '2:00 PM';
   const timeSlots = ['10:00 AM', '11:30 AM', '2:00 PM', '3:30 PM', '5:00 PM'];
@@ -296,6 +316,10 @@
   }
 
   function openBookingModal() {
+    // Refresh calendar days so they always start from tomorrow
+    calendarDays = getCalendarDays();
+    calendarLabel = getCalendarLabel(calendarDays);
+    selectedDate = calendarDays[0];
     isBookingOpen = true;
     bookingStep = 1;
     submitError = '';
@@ -378,14 +402,6 @@
   <header class="hero-section">
     <div class="hero-container">
       <div class="hero-top-badges animate-fade-in">
-        <a 
-          href="/" 
-          class="portfolio-back-pill" 
-          on:click={(e) => handleLinkClick(e, '/')}
-          aria-label="Back to Personal Portfolio"
-        >
-          <span>&larr; Portfolio</span>
-        </a>
         <div class="status-pill">
           <span class="status-dot"></span>
           <span class="status-label">ChizzyVFX — Content Specialist Team</span>
@@ -1427,7 +1443,7 @@
             <div class="calendar-layout">
               <!-- Dates Column -->
               <div class="cal-col">
-                <span class="cal-section-title">Select Day (October 2026)</span>
+                <span class="cal-section-title">Select Day ({calendarLabel})</span>
                 <div class="dates-scroll-grid">
                   {#each calendarDays as day}
                     <button 
@@ -1684,7 +1700,7 @@
           <p class="brand-slogan">A small team, run by Chizzy, built to do the job of four hires.</p>
         </div>
         <div class="footer-links">
-          <a href="/" on:click={(e) => handleLinkClick(e, '/')}>Personal Portfolio</a>
+          <a href="/" on:click={(e) => handleLinkClick(e, '/')}>Portfolio</a>
           <a href="#services">Services</a>
           <a href="#process">Process</a>
           <a href="#pricing">Pricing</a>
@@ -1706,6 +1722,7 @@
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    overflow-x: clip;
   }
 
   .section-container {
@@ -1742,28 +1759,6 @@
     flex-wrap: wrap;
     justify-content: center;
     margin-bottom: 28px;
-  }
-
-  .portfolio-back-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 6px 16px;
-    border-radius: var(--radius-pill);
-    background: var(--bg-secondary);
-    border: 1px solid var(--border-color);
-    font-size: 0.8125rem;
-    font-weight: 600;
-    color: var(--accent-blue);
-    text-decoration: none;
-    transition: all var(--duration-fast) var(--ease-apple);
-    box-shadow: var(--shadow-sm);
-  }
-
-  .portfolio-back-pill:hover {
-    border-color: var(--accent-blue);
-    background: rgba(0, 113, 227, 0.08);
-    transform: translateY(-1px);
   }
 
   /* Navigation Bar */
@@ -3904,38 +3899,6 @@
     padding: 0.85rem 2rem;
   }
 
-  @media (max-width: 650px) {
-    .booking-dialog {
-      padding: 22px 18px;
-      max-height: 94vh;
-    }
-    .apple-step-bar {
-      gap: 3px;
-      padding: 3px;
-    }
-    .step-segment {
-      padding: 6px 8px;
-      font-size: 0.725rem;
-      gap: 5px;
-    }
-    .step-text {
-      display: inline-block;
-    }
-    .calendar-layout {
-      grid-template-columns: 1fr;
-      padding: 14px;
-    }
-    .dates-scroll-grid {
-      grid-template-columns: repeat(4, 1fr);
-    }
-    .inputs-grid {
-      grid-template-columns: 1fr;
-    }
-    .input-field.full-width {
-      grid-column: span 1;
-    }
-  }
-
   /* Guide Section / Lead Magnet */
   .guide-section {
     padding: 70px 0 100px;
@@ -4070,6 +4033,12 @@
     flex-wrap: wrap;
   }
 
+  .footer-brand {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
   .brand-slogan {
     margin-top: 8px;
     font-size: 0.95rem;
@@ -4132,77 +4101,331 @@
   }
 
   @media (max-width: 600px) {
+    /* ── Global containers ── */
+    .section-container {
+      padding: 0 14px;
+    }
+
+    /* ── Navbar ── */
     .nav-container {
-      padding: 10px 16px;
+      padding: 10px 14px;
     }
     .brand {
-      font-size: 1.15rem;
+      font-size: 1.1rem;
     }
     .nav-cta {
-      padding: 0.45rem 0.95rem;
-      font-size: 0.82rem;
+      padding: 0.4rem 0.85rem;
+      font-size: 0.78rem;
     }
+    .theme-toggle {
+      width: 34px;
+      height: 34px;
+    }
+    .nav-actions {
+      gap: 10px;
+    }
+
+    /* ── Hero ── */
     .hero-section {
-      padding: 60px 16px 40px;
+      padding: 48px 14px 32px;
     }
-    .hero-container h1 {
-      font-size: 1.85rem;
-      line-height: 1.2;
+    .hero-title {
+      font-size: 1.75rem;
+      line-height: 1.18;
+      letter-spacing: -0.025em;
     }
-    .hero-sub {
+    .hero-description {
       font-size: 0.95rem;
       line-height: 1.5;
+      margin-bottom: 28px;
+    }
+    .hero-actions {
+      flex-direction: column;
+      width: 100%;
+    }
+    .hero-btn {
+      width: 100%;
+      justify-content: center;
+      padding: 0.8rem 1.5rem;
+      font-size: 0.95rem;
+    }
+    .hero-top-badges {
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    .status-label {
+      font-size: 0.72rem;
+    }
+
+    /* ── Video Section ── */
+    .video-section {
+      padding: 10px 0 40px;
     }
     .video-card {
-      padding: 12px;
-      border-radius: var(--radius-xl);
+      padding: 10px;
+      border-radius: var(--radius-lg);
     }
     .video-card-header {
-      margin-bottom: 10px;
-      padding-bottom: 10px;
+      margin-bottom: 8px;
+      padding-bottom: 8px;
     }
     .video-author {
-      font-size: 0.8rem;
+      font-size: 0.78rem;
+    }
+    .badge-pill {
+      font-size: 0.68rem;
+      padding: 2px 8px;
+    }
+    .video-frame-container {
+      border-radius: var(--radius-md);
+    }
+    .video-card.floating-docked {
+      bottom: 14px;
+      right: 12px;
+      left: 12px;
+      width: auto;
+      max-width: 300px;
+      margin-left: auto;
+    }
+
+    /* ── Problem Section ── */
+    .problem-section {
+      padding: 48px 0;
+    }
+    .problem-card {
+      padding: 22px 18px;
+    }
+    .problem-card h4 {
+      font-size: 1.05rem;
+    }
+    .problem-card p {
+      font-size: 0.88rem;
+    }
+
+    /* ── Services Section ── */
+    .services-section {
+      padding: 60px 0;
+    }
+    .bento-card {
+      padding: 24px 18px;
+    }
+    .bento-card h4 {
+      font-size: 1.1rem;
+    }
+    .bento-card p {
+      font-size: 0.88rem;
+    }
+
+    /* ── Audience Section ── */
+    .audience-section {
+      padding: 40px 0 60px;
+    }
+    .audience-container {
+      padding: 28px 18px;
+    }
+    .audience-item strong {
+      font-size: 1rem;
+    }
+    .audience-item p {
+      font-size: 0.88rem;
+    }
+
+    /* ── Process Section ── */
+    .process-section {
+      padding: 50px 0;
+    }
+    .process-card {
+      padding: 22px 18px;
+    }
+
+    /* ── Section Headers (global) ── */
+    .section-header h2 {
+      font-size: 1.55rem;
+      line-height: 1.2;
+    }
+    .section-sub {
+      font-size: 0.92rem;
+    }
+
+    /* ── Pricing Section ── */
+    .pricing-section {
+      padding: 60px 0;
+    }
+    .pricing-comparison {
+      padding: 22px 16px;
+      gap: 16px;
+    }
+    .strikethrough-price {
+      font-size: 1.5rem;
+    }
+    .chizzy-price {
+      font-size: 2rem;
+    }
+    .chizzy-price span {
+      font-size: 0.9rem;
+    }
+    .comp-arrow {
+      width: 36px;
+      height: 36px;
+    }
+    .tier-row {
+      padding: 16px 14px;
+    }
+    .tier-amount {
+      font-size: 1.4rem;
+    }
+    .tier-name {
+      font-size: 0.95rem;
+    }
+    .tier-metric {
+      font-size: 0.82rem;
+    }
+
+    /* ── Work / Proof Section ── */
+    .work-section {
+      padding: 60px 0;
+    }
+    .bento-hero-grid {
+      gap: 16px;
+      padding: 14px;
+    }
+    .hero-episode-title {
+      font-size: 1.15rem;
+    }
+    .hero-episode-desc {
+      font-size: 0.88rem;
+    }
+    .hero-action-buttons {
+      flex-direction: column;
+      width: 100%;
+    }
+    .hero-watch-btn,
+    .hero-link-btn {
+      width: 100%;
+      justify-content: center;
+      padding: 10px 16px;
+      font-size: 0.88rem;
+    }
+    .bento-play-button {
+      width: 50px;
+      height: 50px;
+    }
+    .work-cta-title {
+      font-size: 1.25rem;
+    }
+    .work-cta-sub {
+      font-size: 0.92rem;
+    }
+
+    /* ── Guide / Lead Magnet Section ── */
+    .guide-section {
+      padding: 48px 0 60px;
+    }
+    .guide-box {
+      padding: 28px 18px;
+    }
+    .guide-intro {
+      font-size: 0.95rem;
+      margin: 10px 0 28px;
+    }
+    .guide-grid {
+      gap: 18px;
+      margin-bottom: 32px;
+    }
+    .guide-item h5 {
+      font-size: 0.95rem;
+    }
+    .guide-item p {
+      font-size: 0.84rem;
     }
     .input-wrapper {
       flex-direction: column;
       border-radius: var(--radius-lg);
       padding: 12px;
-      gap: 12px;
+      gap: 10px;
     }
     .form-btn {
       width: 100%;
     }
-    .video-card.floating-docked {
-      bottom: 16px;
-      right: 14px;
-      left: 14px;
-      width: auto;
-      max-width: 320px;
-      margin-left: auto;
+
+    /* ── Footer — prevent horizontal overflow ── */
+    .footer {
+      padding: 40px 0 28px;
+    }
+    .footer-container {
+      padding: 0 14px;
+    }
+    .footer-top {
+      flex-direction: column;
+      gap: 20px;
+      padding-bottom: 24px;
+    }
+    .footer-links {
+      flex-wrap: wrap;
+      gap: 10px 18px;
+    }
+    .footer-links a {
+      font-size: 0.84rem;
+    }
+    .brand-slogan {
+      font-size: 0.88rem;
+      max-width: 100%;
+    }
+    .footer-bottom {
+      flex-direction: column;
+      gap: 6px;
+      padding-top: 18px;
+      font-size: 0.75rem;
+    }
+
+    /* ── Modals ── */
+    .modal-backdrop {
+      padding: 8px;
+    }
+    .modal-dialog.showcase-modal {
+      padding: 48px 14px 16px;
+      max-height: calc(100dvh - 16px);
+      border-radius: var(--radius-xl);
+    }
+    .modal-header h3 {
+      font-size: 1.05rem;
+      margin: 4px 0 10px;
+      padding-right: 0;
+    }
+    .modal-footer-custom {
+      flex-direction: column-reverse;
+      align-items: stretch;
+    }
+    .modal-ext-btn,
+    .modal-cta-btn {
+      width: 100%;
+      justify-content: center;
     }
   }
     /* ===== Mobile-responsive modals ===== */
   @media (max-width: 650px) {
     .modal-backdrop {
-      padding: 10px;
+      padding: 8px;
     }
 
-    /* Close button: sits above content so it never overlaps the step bar or title */
+    /* Close button */
     .modal-close-btn {
-      top: 12px;
-      right: 12px;
+      top: 10px;
+      right: 10px;
+      width: 30px;
+      height: 30px;
     }
 
     /* Video / Instagram preview modal */
     .modal-dialog.showcase-modal {
-      padding: 56px 16px 18px;
-      max-height: calc(100dvh - 20px);
+      padding: 48px 14px 16px;
+      max-height: calc(100dvh - 16px);
       border-radius: var(--radius-xl);
     }
     .modal-header h3 {
-      font-size: 1.1rem;
-      margin: 4px 0 12px;
+      font-size: 1.05rem;
+      margin: 4px 0 10px;
       padding-right: 0;
     }
     .modal-footer-custom {
@@ -4215,38 +4438,118 @@
       justify-content: center;
     }
 
-    /* Booking modal */
+    /* ── Booking modal ── */
+    .booking-backdrop {
+      padding: 6px;
+      align-items: flex-end;
+    }
     .booking-dialog {
-      padding: 56px 16px 20px;
-      max-height: calc(100dvh - 20px);
-      border-radius: var(--radius-xl);
+      padding: 20px 16px 24px;
+      max-height: calc(100dvh - 12px);
+      border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+      width: 100%;
+      max-width: 100%;
     }
     .booking-header {
-      margin-bottom: 18px;
-      padding-bottom: 16px;
+      margin-bottom: 14px;
+      padding-bottom: 12px;
+    }
+
+    /* Step bar */
+    .apple-step-bar {
+      gap: 3px;
+      padding: 3px;
+    }
+    .step-segment {
+      padding: 6px 6px;
+      font-size: 0.7rem;
+      gap: 4px;
+    }
+    .step-text {
+      display: inline-block;
     }
     .booking-title {
-      font-size: 1.25rem;
+      font-size: 1.15rem;
+    }
+    .booking-sub {
+      font-size: 0.84rem;
+    }
+
+    /* Questions */
+    .q-label {
+      font-size: 0.9rem;
     }
     .option-card {
-      padding: 11px 12px;
+      padding: 10px 12px;
       gap: 10px;
+    }
+    .opt-text strong {
+      font-size: 0.875rem;
+    }
+    .opt-text span {
+      font-size: 0.78rem;
     }
     .opt-badge {
       font-size: 0.6rem;
       padding: 2px 7px;
     }
+    .fit-callout {
+      font-size: 0.84rem;
+      padding: 12px 14px;
+    }
+
+    /* Calendar Step 2 */
+    .calendar-layout {
+      grid-template-columns: 1fr;
+      padding: 12px;
+      gap: 20px;
+    }
+    .cal-section-title {
+      font-size: 0.78rem;
+    }
+    .dates-scroll-grid {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+    }
+    .date-pill {
+      padding: 8px 4px;
+    }
+    .day-name {
+      font-size: 0.65rem;
+    }
+    .day-num {
+      font-size: 1rem;
+    }
+    .day-month {
+      font-size: 0.6rem;
+    }
     .times-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
     }
     .time-pill {
       padding: 9px 4px;
-      font-size: 0.8rem;
+      font-size: 0.78rem;
+    }
+
+    /* Contact inputs */
+    .inputs-grid {
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+    .input-field.full-width {
+      grid-column: span 1;
     }
     .apple-input {
-      font-size: 16px; /* stops iOS from zooming in on focus */
+      font-size: 16px; /* prevents iOS zoom on focus */
+      padding: 12px 14px;
     }
+    .input-label {
+      font-size: 0.8rem;
+    }
+
+    /* Actions */
     .modal-actions {
       justify-content: stretch;
     }
@@ -4257,6 +4560,7 @@
     .modal-actions-split {
       flex-direction: column-reverse;
       align-items: stretch;
+      gap: 10px;
     }
     .back-btn,
     .confirm-btn {
@@ -4266,7 +4570,7 @@
 
     /* Confirmation screen */
     .booking-summary-card {
-      padding: 18px 16px;
+      padding: 16px 14px;
     }
     .summary-row {
       flex-direction: column;
@@ -4279,19 +4583,68 @@
     .meet-pill {
       border-radius: var(--radius-lg);
       text-align: center;
+      font-size: 0.84rem;
     }
     .done-btn {
       width: 100%;
     }
+    .confirmed-title {
+      font-size: 1.2rem;
+    }
+    .confirmed-sub {
+      font-size: 0.88rem;
+    }
   }
 
   @media (max-width: 420px) {
+    .section-container {
+      padding: 0 10px;
+    }
+    .nav-container {
+      padding: 8px 10px;
+    }
+    .brand {
+      font-size: 1rem;
+    }
+    .hero-section {
+      padding: 36px 10px 24px;
+    }
+    .hero-title {
+      font-size: 1.5rem;
+    }
+    .hero-description {
+      font-size: 0.88rem;
+    }
+    .video-card {
+      padding: 8px;
+    }
+    .section-header h2 {
+      font-size: 1.35rem;
+    }
+    .footer-links {
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    /* Booking modal — tighter */
+    .booking-dialog {
+      padding: 16px 12px 20px;
+    }
     /* Show only the active step's label so the 3 steps fit */
     .step-segment:not(.active) .step-text {
       display: none;
     }
     .dates-scroll-grid {
       grid-template-columns: repeat(3, 1fr);
+    }
+    .times-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .booking-title {
+      font-size: 1.05rem;
+    }
+    .q-label {
+      font-size: 0.84rem;
     }
   }
 </style>
